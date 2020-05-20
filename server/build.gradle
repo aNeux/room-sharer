@@ -1,6 +1,30 @@
+plugins {
+    id 'war'
+    id 'org.gretty' version '2.3.1'
+}
+
 group 'ru.ksu'
-version '1.0-SNAPSHOT'
+version '1.0-alpha'
+project.webAppDirName = 'webapp'
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/', 'websrc/'
+        }
+    }
+}
 
 dependencies {
+    compile "com.sun.faces:jsf-api:2.1.7"
+    compile "com.sun.faces:jsf-impl:2.1.7"
+    compile 'org.primefaces:primefaces:6.2'
+    implementation 'javax.el:el-api:2.2'
 
+    gretty 'javax.servlet:jstl:1.2'
+}
+
+gretty {
+    contextPath = 'room-sharer'
+    servletContainer = 'jetty9.4'
 }

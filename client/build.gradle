@@ -1,6 +1,22 @@
-group 'ru.ksu'
-version '1.0-SNAPSHOT'
+plugins {
+    id 'application'
+}
+
+version '1.0-alpha'
+mainClassName = 'ru.ksu.room_sharer.client.Starter'
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/'
+        }
+    }
+}
 
 dependencies {
 
+}
+
+jar {
+    manifest.attributes("Main-Class": mainClassName)
 }
