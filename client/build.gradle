@@ -1,0 +1,6 @@
+group 'ru.ksu'
+version '1.0-SNAPSHOT'
+
+dependencies {
+
+}

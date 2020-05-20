@@ -1,0 +1,14 @@
+group 'ru.ksu'
+version '1.0-SNAPSHOT'
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+}
+
+wrapper {
+    gradleVersion = '5.5'
+}
