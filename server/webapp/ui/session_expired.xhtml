@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+	
+	<ui:define name="title">Войти</ui:define>
+	
+	<f:metadata>
+		<f:viewParam name="requestUrl" value="#{authBean.requestUrl}" />
+		<f:event type="preRenderView" listener="#{authBean.pullValuesFromFlash}"/>
+	</f:metadata>
+	
+	<ui:define name="page">
+		<div id="loginContainer">
+			<h:form id="loginPanel-expired">
+				<div id="expired-msg">Сессия была завершена.<br />Необходимо выполнить вход заново.</div>
+				<p:focus context="loginPanel" />
+				<p:inputText id="userName" styleClass="authorizeField" value="#{authBean.userName}" autocomplete="off" />
+				<p:watermark for="userName" value="Имя пользователя" />
+				<p:password id="password" styleClass="authorizeField" value="#{authBean.password}" feedback="false" />
+				<p:watermark for="password" value="Пароль" />
+				<p:commandButton styleClass="loginButton" value="Sign in" action="#{authBean.login}" ajax="false" update="loginPanel-expired" />
+				<p:messages id="msg" styleClass="loginError" autoUpdate="false" showSummary="false" showDetail="true" />
+				<p:effect type="drop" event="load" for="msg" delay="5000">
+					<f:param name="mode" value="'hide'" />
+					<f:param name="direction" value="'up'" />
+				</p:effect>
+			</h:form>
+			
+			<h:form>
+				<p style="margin-top: 0px" id="copyright">Костромской Государственный Университет &copy; 2020</p>
+			</h:form>
+		</div>
+	</ui:define>
+
+</ui:composition>

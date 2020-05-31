@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3c.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="../templates/ui.xhtml">
+	
+	<ui:define name="page">
+		
+		<div id="menu" class="expanded">
+			<div class="menuShadow" />
+			<div id="menuHeader">Room Sharer</div>
+			
+			<div id="menuBody">
+				<ul>
+					<a href="#{request.contextPath}/ui/restricted/rooms.jsf">
+						<li id="mainMenuItem1" class="#{(guiBean.pageName == 'rooms.xhtml') ? 'activeMenu' : ''}">
+							<span>Кабинеты</span>
+						</li>
+					</a>
+					<c:if test="${userBean.admin}">
+						<a href="#{request.contextPath}/ui/restricted/users.jsf">
+							<li id="mainMenuItem2" class="#{(guiBean.pageName == 'users.xhtml') ? 'activeMenu' : ''}">
+								<span>Пользователи</span>
+							</li>
+						</a>
+					</c:if>
+					<c:if test="${userBean.admin}">
+						<a href="#{request.contextPath}/ui/restricted/settings.jsf">
+							<li id="mainMenuItem3" class="#{(guiBean.pageName == 'settings.xhtml') ? 'activeMenu' : ''}">
+								<span>Настройки</span>
+							</li>
+						</a>
+					</c:if>
+				</ul>
+			</div>
+			
+			<div id="menuFooter">
+				<div id="userContainer">
+					<div id="userNameContainer">
+						<div class="userIcon" id="menuUserIcon" />
+						<h:outputText value="#{userBean.userName}" class="userName" title="#{userBean.userName}"/>
+					</div>
+					<h:form>
+						<p:commandLink title="Выйти" styleClass="signOutIcon" oncomplete="PF('logoutConfirmDialog').show();"/>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		
+		<p:confirmDialog message="Вы уверены, что хотите завершить сессию?" width="450" header="Выйти"
+		                 severity="alert" widgetVar="logoutConfirmDialog" closeOnEscape="true" modal="true">
+			<h:form id="LogoutConfirmDialog">
+				<p:commandButton value="Да" ajax="false" action="login?faces-redirect=true">
+					<f:actionListener binding="#{authBean.logout()}"/>
+				</p:commandButton>
+				<p:commandButton value="Нет" onclick="PF('logoutConfirmDialog').hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:outputPanel id="pageContainer">
+			<h:form>
+				<p:remoteCommand name="updatePageContainer" update="pageContainer" />
+			</h:form>
+			<div id="page">
+				<ui:insert name="content">...</ui:insert>
+			</div>
+			<div id="pageFooter">
+				<span id="footerCopyright" style="margin-top: 0px">Костромской Государственный Университет &copy; 2020</span>
+			</div>
+		</p:outputPanel>
+		
+	</ui:define>
+	
+	<ui:define name="status">
+		<p:ajaxStatus style="width:120px; height:40px; display:block; position:fixed; right:0; top:0;">
+			<f:facet name="start">
+				<p:graphicImage value="/images/loading.gif" />
+			</f:facet>
+			<f:facet name="complete">
+				<h:outputText value="" />
+			</f:facet>
+		</p:ajaxStatus>
+	</ui:define>
+	
+</ui:composition>

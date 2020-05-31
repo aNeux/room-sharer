@@ -19,6 +19,51 @@
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
 	
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>primefaces.FONT_AWESOME</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<filter>
+		<filter-name>Character Encoding Filter</filter-name>
+		<filter-class>ru.ksu.room_sharer.server.web.filters.CharacterEncodingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Character Encoding Filter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>AuthenticationFilter</filter-name>
+		<filter-class>ru.ksu.room_sharer.server.web.filters.AuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/ui/restricted/*</url-pattern>
+	</filter-mapping>
+	
+	<listener>
+		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>ru.ksu.room_sharer.server.web.misc.SessionEventListener</listener-class>
+	</listener>
 	
 	<servlet>
 		<servlet-name>default</servlet-name>
@@ -28,5 +73,23 @@
 			<param-value>false</param-value>
 		</init-param>
 	</servlet>
+	
+	<session-config>
+		<session-timeout>5</session-timeout>
+	</session-config>
+	
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/ui/session_expired.jsf</location>
+	</error-page>
+	
+	<context-param>
+		<param-name>session_expired_page</param-name>
+		<param-value>/ui/session_expired.jsf</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>ru.ksu.room_sharer.server.web.misc.ShutDownHookListener</listener-class>
+	</listener>
 	
 </web-app>

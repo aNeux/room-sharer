@@ -21,6 +21,11 @@ dependencies {
     compile 'org.primefaces:primefaces:6.2'
     implementation 'javax.el:el-api:2.2'
 
+    compile 'org.slf4j:slf4j-api:1.7.13'
+    compile 'org.slf4j:slf4j-log4j12:1.7.13'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+
     gretty 'javax.servlet:jstl:1.2'
 }
 

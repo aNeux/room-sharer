@@ -4,10 +4,38 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
 	
+	<managed-bean eager="true">
+		<managed-bean-name>applicationBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.ApplicationBean</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	
 	<managed-bean>
-		<managed-bean-name>mainBean</managed-bean-name>
-		<managed-bean-class>ru.ksu.room_sharer.server.beans.MainBean</managed-bean-class>
+		<managed-bean-name>loginBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.LoginBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
+	
+	<managed-bean>
+		<managed-bean-name>roomsBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.RoomsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>usersBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.UsersBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>settingsBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.SettingsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<lifecycle>
+		<phase-listener>ru.ksu.room_sharer.server.web.misc.ExpiredSessionPhaseListener</phase-listener>
+	</lifecycle>
+	
 </faces-config>
