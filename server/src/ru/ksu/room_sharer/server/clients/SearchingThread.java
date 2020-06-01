@@ -1,7 +1,5 @@
 package ru.ksu.room_sharer.server.clients;
 
-import ru.ksu.room_sharer.client.misc.Utils;
-
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -20,7 +18,7 @@ public class SearchingThread extends Thread
 	
 	@Override
 	public void run()
-	{
+	{/*
 		while (!stopped.get())
 		{
 			MulticastSocket socket = null;
@@ -49,7 +47,7 @@ public class SearchingThread extends Thread
 			{
 				Utils.closeResource(socket);
 			}
-		}
+		}*/
 	}
 	
 	public void terminate()

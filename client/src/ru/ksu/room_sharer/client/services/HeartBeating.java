@@ -32,7 +32,7 @@ public class HeartBeating extends Thread
 	{
 		// Build message to broadcast
 		String messageString = String.join(";", lanNetworkInfo.getHostName(),
-				lanNetworkInfo.getLanIpAddress(), String.valueOf(config.getWorkingPort()));
+				lanNetworkInfo.getLanIpAddress(), String.valueOf(config.getMulticastPort()));
 		logger.info("Message to broadcast: {}", messageString);
 		byte[] message = messageString.getBytes();
 		
@@ -43,7 +43,7 @@ public class HeartBeating extends Thread
 			{
 				InetAddress group = InetAddress.getByName(config.getMulticastGroupIpAddress());
 				socket = new DatagramSocket();
-				DatagramPacket packet = new DatagramPacket(message, message.length, group, config.getWorkingPort());
+				DatagramPacket packet = new DatagramPacket(message, message.length, group, config.getMulticastPort());
 				socket.send(packet);
 				
 				// Wait specified interval before next beat

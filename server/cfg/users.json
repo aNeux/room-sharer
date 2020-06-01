@@ -1,0 +1,17 @@
+[
+  {
+	"userName": "admin",
+	"password": "21232f297a57a5a743894a0e4a801fc3",
+	"firstName": "Админ",
+	"lastName": "Админович",
+	"department": "Администрация",
+	"admin": true
+  },
+  {
+	"userName": "dog.dog",
+	"password": "c5cae64ebd9b2820ea43e52699b254bb",
+	"firstName": "Денис",
+	"lastName": "Тройченко",
+	"department": "Фитнес-центр"
+  }
+]

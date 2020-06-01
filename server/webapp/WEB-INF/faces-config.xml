@@ -6,7 +6,7 @@
 	
 	<managed-bean eager="true">
 		<managed-bean-name>applicationBean</managed-bean-name>
-		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.ApplicationBean</managed-bean-class>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.init.RoomSharerApplicationBean</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	

@@ -16,15 +16,17 @@ public class Starter
 	
 	public static void main(String[] args) throws Exception
 	{
+		System.out.println("Starting Room-Sharer client application..");
+		
 		// Set logger configuration file
 		PropertyConfigurator.configureAndWatch("log.properties");
 		
 		// Load configuration and local network information
-		Configuration config = new Configuration(new File("config.cfg"));
+		Configuration config = new Configuration(new File("room-sharer.cfg"));
 		LanNetworkInfo lanNetworkInfo = new LanNetworkInfo();
 		
 		// Start heart beating
-		logger.info("Starting hartbeat thread with interval = {} ms", config.getHeartbeatInterval());
+		logger.info("Starting heartbeat thread with interval = {} ms", config.getHeartbeatInterval());
 		new HeartBeating(lanNetworkInfo, config).start();
 	}
 }

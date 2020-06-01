@@ -1,4 +1,6 @@
 package ru.ksu.room_sharer.server.web.beans;
 
-public class SettingsBean extends ApplicationBean
+import ru.ksu.room_sharer.server.web.beans.init.RoomSharerBean;
+
+public class SettingsBean extends RoomSharerBean
 {}

@@ -357,13 +357,13 @@ img {
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(to top, #ece5ee 0%, #7db3dc 36%, #10456d 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#10456d',endColorstr='#ece5ee'); /* for IE6-9 */
-	background: -webkit-linear-gradient(to top, #ece5ee 0%, #7db3dc 36%, #10456d 100%); /* for webkit-browsers */
-	background: -moz-linear-gradient(to top, #ece5ee 0%, #7db3dc 36%, #10456d 100%); /* for firefox 3.6+ */ 
-	background: -o-linear-gradient(to top, #ece5ee 0%, #7db3dc 36%, #10456d 100%); /* for Opera 11.10+ */
-	background: -ms-linear-gradient(to top, #ece5ee 0%, #7db3dc 36%, #10456d 100%); /* for IE10+ */
-	-pie-background: linear-gradient(#10456d, #ece5ee);
+	background: linear-gradient(to top, #E0E0E0 0%, #C4C4C4 36%, #898989 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#898989',endColorstr='#E0E0E0'); /* for IE6-9 */
+	background: -webkit-linear-gradient(to top, #E0E0E0 0%, #C4C4C4 36%, #898989 100%); /* for webkit-browsers */
+	background: -moz-linear-gradient(to top, #E0E0E0 0%, #C4C4C4 36%, #898989 100%); /* for firefox 3.6+ */
+	background: -o-linear-gradient(to top, #E0E0E0 0%, #C4C4C4 36%, #898989 100%); /* for Opera 11.10+ */
+	background: -ms-linear-gradient(to top, #E0E0E0 0%, #C4C4C4 36%, #898989 100%); /* for IE10+ */
+	-pie-background: linear-gradient(#898989, #E0E0E0);
 }
 
 #loginPanel, #loginPanel-expired {
@@ -375,7 +375,6 @@ img {
 	margin-top:-97px;
 	margin-left: -140px;
 	background: #fff;
-	border-radius: 5px;
 	box-shadow: 0px 3px 20px rgba(24,58,85,0.5);
 	font-size: 1.231em;
 }
@@ -392,6 +391,16 @@ img {
 	top: 30px;
 	box-shadow: 0px 3px 40px rgba(24,58,85,1);
 	font-size: 0.75em;
+}
+
+#roomSharerLogoContainer {
+	position: absolute;
+	left: 32%;
+	top: 50%;
+	margin-top: -150px;
+	margin-left: -70px;
+	width: 250px;
+	height: 40px;
 }
 
 .authorizeField {
@@ -411,11 +420,11 @@ img {
 }
 
 #copyright {
-	font-size: 0.7em;
+	font-size: 1.1em;
 	color: #777777;
 	position: absolute;
 	bottom: 10px;
-	left: 20px;
+	right: 20px;
 }
 
 #loginContainer table, #loginContainer tr {

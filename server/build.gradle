@@ -1,6 +1,9 @@
 plugins {
     id 'war'
-    id 'org.gretty' version '2.3.1'
+}
+
+ext {
+    war_name = 'room-sharer.war'
 }
 
 group 'ru.ksu'
@@ -19,6 +22,7 @@ dependencies {
     compile "com.sun.faces:jsf-api:2.1.7"
     compile "com.sun.faces:jsf-impl:2.1.7"
     compile 'org.primefaces:primefaces:6.2'
+    compile "javax.servlet:javax.servlet-api:3.0.1"
     implementation 'javax.el:el-api:2.2'
 
     compile 'org.slf4j:slf4j-api:1.7.13'
@@ -26,10 +30,28 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
 
-    gretty 'javax.servlet:jstl:1.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
 }
 
-gretty {
-    contextPath = 'room-sharer'
-    servletContainer = 'jetty9.4'
+
+compileJava.options.encoding = 'UTF-8'
+
+war {
+    archiveName = war_name
+}
+
+task copyWar(type: Copy, dependsOn: war) {
+    from "build/libs/${war_name}"
+    into 'jetty/webapps/'
+}
+
+task runRoomSharer(type: JavaExec,  group: 'Room-Sharer',
+        description: 'Builds WAR file, deploys it to Jetty and starts Jetty with remote debugging enabled',
+        dependsOn: copyWar) {
+    workingDir = file('jetty')
+    classpath = files('jetty/start.jar')
+    main = 'org.eclipse.jetty.start.Main'
+    jvmArgs '-Xdebug', '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
 }

@@ -2,6 +2,8 @@ package ru.ksu.room_sharer.server.web.misc;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -17,9 +19,11 @@ import javax.faces.render.RenderKitFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ExpiredSessionPhaseListener extends UserBean implements PhaseListener
+public class ExpiredSessionPhaseListener implements PhaseListener
 {
 	private static final long serialVersionUID = -418100930178106626L;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ExpiredSessionPhaseListener.class);
 	private final static String SESSION_EXPIRED_PAGE_CONTEXT_PARAM = "session_expired_page";
 	
 	@Override
@@ -28,8 +32,8 @@ public class ExpiredSessionPhaseListener extends UserBean implements PhaseListen
 	@Override
 	public void beforePhase(PhaseEvent event)
 	{
-		if (!UserInfoUtils.isLoggedIn())
-		{
+		//if (!UserInfoUtils.isLoggedIn())
+		//{
 			FacesContext fc = FacesContext.getCurrentInstance();
 			RequestContext rc = RequestContext.getCurrentInstance();
 			ExternalContext ec = fc.getExternalContext();
@@ -39,7 +43,7 @@ public class ExpiredSessionPhaseListener extends UserBean implements PhaseListen
 			String page = ec.getInitParameter(SESSION_EXPIRED_PAGE_CONTEXT_PARAM);
 			if (page == null)
 			{
-				getLogger().error("Redirect page for expired session is not described in 'web.xml.'"
+				logger.error("Redirect page for expired session is not described in 'web.xml.'"
 						+ " Please, add context parameter '{}'", SESSION_EXPIRED_PAGE_CONTEXT_PARAM);
 				return;
 			}
@@ -68,10 +72,10 @@ public class ExpiredSessionPhaseListener extends UserBean implements PhaseListen
 			}
 			catch (Exception e)
 			{
-				getLogger().error("Redirect to the specified page '" + url + "' failed");
+				logger.error("Redirect to the specified page '" + url + "' failed");
 				throw new FacesException(e);
 			}
-		}
+		//}
 	}
 	
 	@Override

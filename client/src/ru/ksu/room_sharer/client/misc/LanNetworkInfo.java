@@ -11,13 +11,12 @@ public class LanNetworkInfo
 	
 	public LanNetworkInfo() throws SocketException, UnknownHostException
 	{
-		// Obtain lan address
+		// Obtain lan address for the client
 		try (DatagramSocket socket = new DatagramSocket())
 		{
 			socket.connect(InetAddress.getByName("8.8.8.8"), 1002);
-			lanIpAddress = socket.getLocalAddress().getHostAddress(); // FIXME: On Linux name is wrong!
+			lanIpAddress = socket.getLocalAddress().getHostAddress();
 		}
-		
 		// Obtain host name
 		hostName = InetAddress.getLocalHost().getHostName();
 	}

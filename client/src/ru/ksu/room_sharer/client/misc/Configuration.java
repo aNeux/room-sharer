@@ -25,15 +25,25 @@ public class Configuration
 		return props.getProperty("MULTICAST_GROUP_IP_ADDRESS","226.186.248.17");
 	}
 	
-	public int getWorkingPort()
+	public int getMulticastPort()
 	{
-		String res = props.getProperty("WORKING_PORT");
-		return StringUtils.isNotBlank(res) ? Integer.parseInt(res) : 7562;
+		return getIntProperty("MULTICAST_PORT", 7562);
 	}
 	
 	public int getHeartbeatInterval()
 	{
-		String res = props.getProperty("HEARTBEAT_INTERVAL");
-		return StringUtils.isNotBlank(res) ? Integer.parseInt(res) : 30000;
+		return getIntProperty("HEARTBEAT_INTERVAL", 3000);
+	}
+	
+	public int getStreamingPort()
+	{
+		return getIntProperty("STREAMING_PORT", 7563);
+	}
+	
+	
+	private int getIntProperty(String name, int defaultValue)
+	{
+		String res = props.getProperty(name);
+		return StringUtils.isNotBlank(res) ? Integer.parseInt(res) : defaultValue;
 	}
 }

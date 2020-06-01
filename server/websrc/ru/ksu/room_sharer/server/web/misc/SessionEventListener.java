@@ -22,9 +22,8 @@ public class SessionEventListener implements HttpSessionListener, EventListener
 	public void sessionDestroyed(HttpSessionEvent event)
 	{
 		HttpSession destroyedSession = event.getSession();
-		String destroyedSessionId = destroyedSession.getId();
-		logger.debug("Destroyed session '{}'", destroyedSessionId);
+		logger.debug("Destroyed session '{}'", destroyedSession.getId());
 		
-		UserSessionCollector.removeSession(destroyedSession);
+		//UserSessionCollector.removeSession(destroyedSession);
 	}
 }
