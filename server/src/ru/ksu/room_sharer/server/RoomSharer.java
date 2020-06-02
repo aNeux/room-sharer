@@ -44,7 +44,7 @@ public class RoomSharer
 			appConfig.init();
 			usersManager = new UsersManager(new File(getRootRelative(appConfig.getUsersFile())));
 			
-			Files.createDirectories(Paths.get(getRootRelative(appConfig.getRoomsDir())));
+			Files.createDirectories(Paths.get(getRootRelative(appConfig.getUsersRoomsDir())));
 		}
 		catch (Exception e)
 		{

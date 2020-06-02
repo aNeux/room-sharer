@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class LoginBean extends RoomSharerBean
 {
-	public static final String AUTH_KEY = "user.auth_key", IS_ADMIN_KEY = "user.is_admin",
-			LOGIN_PAGE = "/ui/login.jsf", ROOMS_PAGE = "/ui/restricted/rooms.jsf";
+	public static final String AUTH_KEY = "user.data", ADMIN_KEY = "user.admin",
+			LOGIN_PAGE = "/ui/login.jsf", COMMON_ROOMS_PAGE = "/ui/restricted/common_rooms.jsf";
 	
 	public static final String USER_NAME = "userName", PASSWORD = "password";
 	
@@ -72,8 +72,12 @@ public class LoginBean extends RoomSharerBean
 		
 		UserSessionCollector.registerCurrentSession(userName);
 		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		sessionMap.remove(AUTH_KEY);
+		sessionMap.remove(ADMIN_KEY);
+		
 		sessionMap.put(AUTH_KEY, user.getUserName());
-		sessionMap.put(IS_ADMIN_KEY, user.isAdmin());
+		if (user.isAdmin())
+			sessionMap.put(ADMIN_KEY, true);
 		
 		initLogger();
 		getLogger().info("Logged in");
@@ -90,7 +94,7 @@ public class LoginBean extends RoomSharerBean
 				requestUrl = null;
 			}
 			else
-				FacesContext.getCurrentInstance().getExternalContext().redirect(context + ROOMS_PAGE);
+				FacesContext.getCurrentInstance().getExternalContext().redirect(context + COMMON_ROOMS_PAGE);
 		}
 		catch (IOException e)
 		{

@@ -10,7 +10,7 @@ public class AppConfig
 {
 	private static final String CFG_DIR = "cfg/",
 			LOGS_PROPERTIES_FILE = CFG_DIR + "log.properties",
-			ROOMS_DIR = "rooms/", COMMON_ROOMS_FILE = CFG_DIR + "common-rooms.json",
+			USERS_ROOMS_DIR = CFG_DIR + "users_rooms/", COMMON_ROOMS_FILE = CFG_DIR + "common-rooms.json",
 			USERS_FILE = CFG_DIR + "users.json";
 	
 	private final String configFileName;
@@ -57,9 +57,9 @@ public class AppConfig
 		return LOGS_PROPERTIES_FILE;
 	}
 	
-	public String getRoomsDir()
+	public String getUsersRoomsDir()
 	{
-		return ROOMS_DIR;
+		return USERS_ROOMS_DIR;
 	}
 	
 	public String getCommonRoomsFile()

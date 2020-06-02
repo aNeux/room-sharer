@@ -3,8 +3,8 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="Stemplates/ui.xhtml">
+                xmlns:b="http://bootsfaces.net/ui"
+                template="templates/ui.xhtml">
 	
 	<ui:define name="title">Войти</ui:define>
 	
@@ -15,20 +15,19 @@
 	
 	<ui:define name="page">
 		<div id="loginContainer">
-			<h:form id="loginPanel-expired">
-				<div id="roomSharerLogoContainer"><img src="../images/room-sharer-logo.png" style="width: 100%; height: 100%" /></div>
-				<div id="expired-msg">Сессия была завершена.<br />Необходимо выполнить вход заново.</div>
-				<p:focus context="loginPanel" />
-				<p:inputText id="userName" styleClass="authorizeField" value="#{loginBean.userName}" autocomplete="off" maxlength="100" />
-				<p:watermark for="userName" value="Имя пользователя" />
-				<p:password id="password" styleClass="authorizeField" value="#{loginBean.password}" feedback="false" maxlength="100" />
-				<p:watermark for="password" value="Пароль" />
-				<p:commandButton styleClass="loginButton" value="Войти" action="#{loginBean.login}" ajax="false" update="loginPanel-expired" />
+			<h:form id="loginPanel">
+				<div id="roomSharerLoginImageContainer"><img src="../images/room-sharer-logo.png" style="width: 100%; height: 100%" /></div>
+				<b:focus context="loginPanel" />
+				<b:inputText placeholder="Имя пользователя" value="#{loginBean.userName}" maxlength="100" />
+				<b:inputSecret placeholder="Пароль" value="#{loginBean.password}" maxlength="100" />
+				<b:commandButton style="width: 100%" value="Войти" action="#{loginBean.login}" ajax="false" />
+				
+				<div id="expiredSessionContainer">
+					<b:alert style="expiredSession-alert" severity="warning" title="Сессия была завершена">Необходимо выполнить вход заново</b:alert>
+				</div>
 			</h:form>
 			
-			<h:form>
-				<p style="margin-top: 0px" id="copyright">Костромской Государственный Университет &copy; 2020</p>
-			</h:form>
+			<p id="loginCopyright">Костромской Государственный Университет &copy; 2020</p>
 		</div>
 	</ui:define>
 

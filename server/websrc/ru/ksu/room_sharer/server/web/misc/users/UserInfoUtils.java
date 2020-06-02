@@ -24,6 +24,6 @@ public class UserInfoUtils
 	
 	public static boolean isAdmin()
 	{
-		return (boolean)getSessionMap().get(LoginBean.IS_ADMIN_KEY);
+		return getSessionMap().get(LoginBean.ADMIN_KEY) != null;
 	}
 }

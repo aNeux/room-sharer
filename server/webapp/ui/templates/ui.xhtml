@@ -3,7 +3,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:b="http://bootsfaces.net/ui">
 
 	<f:view contentType="text/html">
 		
@@ -24,7 +24,7 @@
 		
 		<h:body>
 			<h:form id="Growl">
-				<p:growl showDetail="true" escape="false" life="10000"/>
+				<b:growl placementFrom="top" showDetail="true" allowDismiss="true" delay="10000" escape="false" />
 			</h:form>
 			
 			<ui:insert name="page"></ui:insert>
@@ -32,4 +32,5 @@
 		</h:body>
 		
 	</f:view>
+
 </html>

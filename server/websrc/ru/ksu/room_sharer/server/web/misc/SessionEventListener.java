@@ -2,6 +2,7 @@ package ru.ksu.room_sharer.server.web.misc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ksu.room_sharer.server.web.misc.users.UserSessionCollector;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -23,7 +24,6 @@ public class SessionEventListener implements HttpSessionListener, EventListener
 	{
 		HttpSession destroyedSession = event.getSession();
 		logger.debug("Destroyed session '{}'", destroyedSession.getId());
-		
-		//UserSessionCollector.removeSession(destroyedSession);
+		UserSessionCollector.removeSession(destroyedSession);
 	}
 }

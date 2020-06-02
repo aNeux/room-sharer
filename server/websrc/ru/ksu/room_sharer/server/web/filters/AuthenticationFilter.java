@@ -30,16 +30,13 @@ public class AuthenticationFilter implements Filter
 			servletResponse.sendRedirect(context + LoginBean.LOGIN_PAGE + "?requestUrl="
 					+ servletRequest.getRequestURI().replace("/", "%2F"));
 		}
-		else
+		else if (session.getAttribute(LoginBean.ADMIN_KEY) == null)
 		{
-			boolean isAdmin = (boolean)session.getAttribute(LoginBean.IS_ADMIN_KEY);
-			if (!isAdmin)
-			{
-				String requestUri = servletRequest.getRequestURI();
-				// Only admin could access settings and users pages
-				if (!("room-sharer/ui/restricted/" + LoginBean.ROOMS_PAGE).equals(requestUri))
-					servletResponse.sendRedirect(context + LoginBean.ROOMS_PAGE);
-			}
+			String requestedPage = servletRequest.getRequestURI();
+			requestedPage = requestedPage.substring(requestedPage.lastIndexOf('/') + 1, requestedPage.lastIndexOf('.'));
+			// Only admin could access settings and users pages
+			if (!("common_rooms".equals(requestedPage) || "my_rooms".equals(requestedPage)))
+				servletResponse.sendRedirect(context + LoginBean.COMMON_ROOMS_PAGE);
 		}
 		chain.doFilter(request, servletResponse);
 	}

@@ -1,1 +1,1 @@
-<% response.sendRedirect("ui/rooms.jsf"); %>
+<% response.sendRedirect("ui/restricted/common_rooms.jsf"); %>

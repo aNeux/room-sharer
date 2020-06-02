@@ -4,6 +4,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ksu.room_sharer.server.web.misc.users.UserInfoUtils;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -32,8 +33,8 @@ public class ExpiredSessionPhaseListener implements PhaseListener
 	@Override
 	public void beforePhase(PhaseEvent event)
 	{
-		//if (!UserInfoUtils.isLoggedIn())
-		//{
+		if (!UserInfoUtils.isLoggedIn())
+		{
 			FacesContext fc = FacesContext.getCurrentInstance();
 			RequestContext rc = RequestContext.getCurrentInstance();
 			ExternalContext ec = fc.getExternalContext();
@@ -54,7 +55,7 @@ public class ExpiredSessionPhaseListener implements PhaseListener
 			
 			try
 			{
-				if (((rc != null && PrimeFaces.current().isAjaxRequest()) || (fc.getPartialViewContext().isPartialRequest()))
+				if ((rc != null && PrimeFaces.current().isAjaxRequest() || fc.getPartialViewContext().isPartialRequest())
 						&& fc.getResponseWriter() == null && fc.getRenderKit() == null)
 				{
 					response.setCharacterEncoding(request.getCharacterEncoding());
@@ -75,7 +76,7 @@ public class ExpiredSessionPhaseListener implements PhaseListener
 				logger.error("Redirect to the specified page '" + url + "' failed");
 				throw new FacesException(e);
 			}
-		//}
+		}
 	}
 	
 	@Override

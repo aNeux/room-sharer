@@ -9,6 +9,7 @@ ext {
 group 'ru.ksu'
 version '1.0-alpha'
 project.webAppDirName = 'webapp'
+compileJava.options.encoding = 'UTF-8'
 
 sourceSets {
     main {
@@ -21,22 +22,22 @@ sourceSets {
 dependencies {
     compile "com.sun.faces:jsf-api:2.1.7"
     compile "com.sun.faces:jsf-impl:2.1.7"
+
     compile 'org.primefaces:primefaces:6.2'
+    compile 'net.bootsfaces:bootsfaces:1.4.2'
+    implementation fileTree('libs').include('*.jar')
     compile "javax.servlet:javax.servlet-api:3.0.1"
     implementation 'javax.el:el-api:2.2'
 
     compile 'org.slf4j:slf4j-api:1.7.13'
     compile 'org.slf4j:slf4j-log4j12:1.7.13'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
-    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+    compile 'org.apache.commons:commons-lang3:3.10'
+    compile 'org.apache.commons:commons-collections4:4.4'
 
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
 }
-
-
-compileJava.options.encoding = 'UTF-8'
 
 war {
     archiveName = war_name

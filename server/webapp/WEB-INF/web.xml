@@ -39,6 +39,11 @@
 		<param-value>true</param-value>
 	</context-param>
 	
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>bootstrap</param-value>
+	</context-param>
+	
 	<filter>
 		<filter-name>Character Encoding Filter</filter-name>
 		<filter-class>ru.ksu.room_sharer.server.web.filters.CharacterEncodingFilter</filter-class>
@@ -75,7 +80,7 @@
 	</servlet>
 	
 	<session-config>
-		<session-timeout>5</session-timeout>
+		<session-timeout>3</session-timeout>
 	</session-config>
 	
 	<error-page>
