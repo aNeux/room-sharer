@@ -72,12 +72,8 @@ public class LoginBean extends RoomSharerBean
 		
 		UserSessionCollector.registerCurrentSession(userName);
 		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		sessionMap.remove(AUTH_KEY);
-		sessionMap.remove(ADMIN_KEY);
-		
 		sessionMap.put(AUTH_KEY, user.getUserName());
-		if (user.isAdmin())
-			sessionMap.put(ADMIN_KEY, true);
+		sessionMap.put(ADMIN_KEY, user.isAdmin());
 		
 		initLogger();
 		getLogger().info("Logged in");

@@ -17,7 +17,7 @@ public class RoomSharerBean
 	{
 		String loggerName = this.getClass().getName();
 		if (UserInfoUtils.isLoggedIn())
-			loggerName += "User: " + UserInfoUtils.getUserName();
+			loggerName += "User: <" + UserInfoUtils.getUserName() + ">";
 		logger = LoggerFactory.getLogger(loggerName);
 	}
 	

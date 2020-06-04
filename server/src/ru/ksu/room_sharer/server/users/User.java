@@ -1,5 +1,8 @@
 package ru.ksu.room_sharer.server.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import ru.ksu.room_sharer.server.web.misc.users.UserSessionCollector;
+
 import java.io.Serializable;
 
 public class User implements Serializable
@@ -10,6 +13,16 @@ public class User implements Serializable
 	private boolean admin = false;
 	
 	public User() { }
+	
+	public User(User user)
+	{
+		this.userName = user.getUserName();
+		this.password = user.getPassword();
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.department = user.getDepartment();
+		this.admin = user.isAdmin();
+	}
 	
 	public User(String userName, String password, String firstName, String lastName, String department, boolean admin)
 	{
@@ -79,5 +92,11 @@ public class User implements Serializable
 	public boolean isAdmin()
 	{
 		return admin;
+	}
+	
+	@JsonIgnore
+	public boolean isOnline()
+	{
+		return UserSessionCollector.getSessionsByLogin(getUserName()).size() != 0;
 	}
 }

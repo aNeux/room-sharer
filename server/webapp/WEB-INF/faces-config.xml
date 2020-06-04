@@ -35,8 +35,8 @@
 	</managed-bean>
 	
 	<managed-bean>
-		<managed-bean-name>usersBean</managed-bean-name>
-		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.UsersBean</managed-bean-class>
+		<managed-bean-name>usersManagementBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.UsersManagementBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
@@ -45,6 +45,10 @@
 		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.SettingsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	
+	<factory>
+		<exception-handler-factory>ru.ksu.room_sharer.server.web.misc.FacesExceptionHandlerFactory</exception-handler-factory>
+	</factory>
 	
 	<lifecycle>
 		<phase-listener>ru.ksu.room_sharer.server.web.misc.ExpiredSessionPhaseListener</phase-listener>

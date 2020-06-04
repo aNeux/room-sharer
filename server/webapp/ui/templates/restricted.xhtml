@@ -15,13 +15,14 @@
 				<b:navLink value="Общие кабинеты" href="#{request.contextPath}/ui/restricted/common_rooms.jsf" active="#{guiBean.pageName == 'common_rooms'}" />
 				<b:navLink value="Мои кабинеты" href="#{request.contextPath}/ui/restricted/my_rooms.jsf" active="#{guiBean.pageName == 'my_rooms'}" />
 				<c:if test="#{userBean.admin}">
-					<b:navLink value="Пользователи" href="#{request.contextPath}/ui/restricted/users.jsf" active="#{guiBean.pageName == 'users'}" />
+					<b:navLink value="Пользователи" href="#{request.contextPath}/ui/restricted/users_management.jsf" active="#{guiBean.pageName == 'users_management'}" />
 					<b:navLink value="Настройки" href="#{request.contextPath}/ui/restricted/settings.jsf" active="#{guiBean.pageName == 'settings'}" />
 				</c:if>
 			</b:navbarLinks>
 			
 			<div class="navbar-form navbar-right" style="position: absolute; right: 100px;">
-				<button type="submit" class="btn btn-default" onclick="PF('logoutConfirmDialog').show();">Выйти</button>
+				<h:outputText id="userNameSpan" value="#{userBean.userName}" />
+				<button class="btn btn-default" onclick="PF('logoutConfirmDialog').show();">Выйти</button>
 			</div>
 		</b:navBar>
 		
@@ -35,22 +36,22 @@
 		
 		<p:outputPanel id="pageContainer">
 			<h:form>
-				<p:remoteCommand name="updatePageContainer" update="pageContainer" />
+				<p:poll interval="30" autostart="true" />
 			</h:form>
-			<div id="page">
-				<ui:insert name="content">...</ui:insert>
+			<div>
+				<ui:insert name="content"></ui:insert>
 			</div>
 			<div id="pageFooter">
-				<span id="footerCopyright" style="margin-top: 0px">Костромской Государственный Университет &copy; 2020</span>
+				<span style="margin-top: 0px">Костромской Государственный Университет &copy; 2020</span>
 			</div>
 		</p:outputPanel>
 		
 	</ui:define>
 	
 	<ui:define name="status">
-		<p:ajaxStatus style="width:120px; height:40px; display:block; position:fixed; right:0; top:0;">
+		<p:ajaxStatus style="position: absolute; top:10px; right: 35px;">
 			<f:facet name="start">
-				<p:graphicImage value="/images/loading.gif" />
+				<h:graphicImage width="32" value="/images/loading.gif" />
 			</f:facet>
 			<f:facet name="complete">
 				<h:outputText value="" />

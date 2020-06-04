@@ -26,7 +26,7 @@ public class UserSessionCollector
 	
 	public static void registerCurrentSession(String login)
 	{
-		HttpSession currentSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		HttpSession currentSession = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		String currentSessionId = currentSession.getId();
 		
 		synchronized (UserSessionCollector.class)

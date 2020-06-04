@@ -75,6 +75,15 @@ img {
 
 /* RESTRICTED PAGES */
 
+#userNameSpan {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 10px;
+	font-weight: bold;
+	font-size: 12pt;
+	color: #878787;
+}
+
 #pageContainer {
 	background: none;
 	overflow: auto;
@@ -96,9 +105,4 @@ img {
 	text-align: right;
 	font-size: 0.813em;
 	color: #777777;
-}
-
-#pageFooterCopyright {
-	text-align: right;
-	margin-left: 20px;
 }

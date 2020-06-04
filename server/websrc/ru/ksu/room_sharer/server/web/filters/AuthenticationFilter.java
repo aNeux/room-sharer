@@ -26,19 +26,19 @@ public class AuthenticationFilter implements Filter
 		
 		if (session.getAttribute(LoginBean.AUTH_KEY) == null)
 		{
-			// Seems, user isn't login.. Redirect him to the login page
+			// Seems, user isn't login. Redirect him to the login page
 			servletResponse.sendRedirect(context + LoginBean.LOGIN_PAGE + "?requestUrl="
 					+ servletRequest.getRequestURI().replace("/", "%2F"));
 		}
-		else if (session.getAttribute(LoginBean.ADMIN_KEY) == null)
+		else
 		{
 			String requestedPage = servletRequest.getRequestURI();
 			requestedPage = requestedPage.substring(requestedPage.lastIndexOf('/') + 1, requestedPage.lastIndexOf('.'));
-			// Only admin could access settings and users pages
-			if (!("common_rooms".equals(requestedPage) || "my_rooms".equals(requestedPage)))
-				servletResponse.sendRedirect(context + LoginBean.COMMON_ROOMS_PAGE);
+			if (session.getAttribute(LoginBean.ADMIN_KEY) == null && (!("common_rooms".equals(requestedPage) || "my_rooms".equals(requestedPage))))
+				servletResponse.sendRedirect(context + LoginBean.COMMON_ROOMS_PAGE); // Only admins could access users management and settings pages
+			else
+				chain.doFilter(request, servletResponse); // No restrictions found to process request
 		}
-		chain.doFilter(request, servletResponse);
 	}
 	
 	@Override

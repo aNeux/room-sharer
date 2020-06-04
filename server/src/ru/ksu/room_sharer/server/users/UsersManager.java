@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UsersManager
 {
@@ -19,7 +21,7 @@ public class UsersManager
 	
 	private final File usersFile;
 	private volatile List<User> usersList;
-	private final Object usersListMonitor = new Object(); // Required as usersList is reset on reload
+	private volatile Date lastUpdateDate;
 	
 	public UsersManager(File usersFile) throws IOException
 	{
@@ -29,10 +31,16 @@ public class UsersManager
 	
 	public void loadUsersList() throws IOException
 	{
-		synchronized (usersListMonitor)
+		synchronized (UsersManager.class)
 		{
 			usersList = new ObjectMapper().readValue(usersFile, new TypeReference<List<User>>(){ });
+			lastUpdateDate = new Date();
 		}
+	}
+	
+	public List<User> getUsers()
+	{
+		return usersList.stream().map(User::new).collect(Collectors.toList());
 	}
 	
 	public User isUserAllowed(String login, String password)
@@ -49,6 +57,11 @@ public class UsersManager
 				return user;
 		}
 		return null;
+	}
+	
+	public Date getLastUpdateDate()
+	{
+		return lastUpdateDate;
 	}
 	
 	

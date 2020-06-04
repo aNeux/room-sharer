@@ -48,6 +48,7 @@
 		<filter-name>Character Encoding Filter</filter-name>
 		<filter-class>ru.ksu.room_sharer.server.web.filters.CharacterEncodingFilter</filter-class>
 	</filter>
+	
 	<filter-mapping>
 		<filter-name>Character Encoding Filter</filter-name>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -57,6 +58,7 @@
 		<filter-name>AuthenticationFilter</filter-name>
 		<filter-class>ru.ksu.room_sharer.server.web.filters.AuthenticationFilter</filter-class>
 	</filter>
+	
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/ui/restricted/*</url-pattern>
@@ -80,7 +82,7 @@
 	</servlet>
 	
 	<session-config>
-		<session-timeout>3</session-timeout>
+		<session-timeout>5</session-timeout>
 	</session-config>
 	
 	<error-page>
@@ -92,6 +94,26 @@
 		<param-name>session_expired_page</param-name>
 		<param-value>/ui/session_expired.jsf</param-value>
 	</context-param>
+	
+	<mime-mapping>
+		<extension>woff</extension>
+		<mime-type>application/font-woff</mime-type>
+	</mime-mapping>
+	
+	<mime-mapping>
+		<extension>eot</extension>
+		<mime-type>application/vnd.ms-fontobject</mime-type>
+	</mime-mapping>
+	
+	<mime-mapping>
+		<extension>ttf</extension>
+		<mime-type>application/font-ttf</mime-type>
+	</mime-mapping>
+	
+	<mime-mapping>
+		<extension>cfg</extension>
+		<mime-type>text/cfg</mime-type>
+	</mime-mapping>
 	
 	<listener>
 		<listener-class>ru.ksu.room_sharer.server.web.misc.ShutDownHookListener</listener-class>

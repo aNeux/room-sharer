@@ -49,7 +49,7 @@ public class ExpiredSessionPhaseListener implements PhaseListener
 				return;
 			}
 			
-			String url =  ec.getRequestContextPath() + page;
+			String url = ec.getRequestContextPath() + page;
 			if (ec.isResponseCommitted())
 				return;
 			

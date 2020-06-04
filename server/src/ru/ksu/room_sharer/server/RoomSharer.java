@@ -37,6 +37,7 @@ public class RoomSharer
 		this.appConfig = appConfig;
 		appRoot = deploymentConfig.getAppRoot();
 		root = deploymentConfig.getRoot();
+		System.setOut(new ConsoleOutFilter(System.out));
 		PropertyConfigurator.configureAndWatch(getRootRelative(appConfig.getLogsPropertiesFile()));
 		
 		try
