@@ -3,6 +3,7 @@ package ru.ksu.room_sharer.server.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.ksu.room_sharer.server.web.misc.users.UserSessionCollector;
 
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 public class User implements Serializable
@@ -98,5 +99,17 @@ public class User implements Serializable
 	public boolean isOnline()
 	{
 		return UserSessionCollector.getSessionsByLogin(getUserName()).size() != 0;
+	}
+	
+	@JsonIgnore
+	public int getSessionsCount()
+	{
+		return UserSessionCollector.getSessionsByLogin(getUserName()).size();
+	}
+	
+	@JsonIgnore
+	public void closeSessions()
+	{
+		UserSessionCollector.getSessionsByLogin(getUserName()).forEach(HttpSession::invalidate);
 	}
 }

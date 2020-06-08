@@ -80,10 +80,10 @@ public class LoginBean extends RoomSharerBean
 		
 		try
 		{
-			String context = getContext();
+			String context = getRequestContextPath();
 			getLogger().trace("Context: " + context);
 			
-			// If user tried to access resources when he wasn't authorized, use requestUrl from AuthenticationFilter to redirect user to that resource
+			// If user tried to access resources not authorized, use requestUrl from AuthenticationFilter to redirect him after logging in
 			if (requestUrl != null)
 			{
 				FacesContext.getCurrentInstance().getExternalContext().redirect(requestUrl);
@@ -105,7 +105,7 @@ public class LoginBean extends RoomSharerBean
 		
 		try
 		{
-			String context = getContext();
+			String context = getRequestContextPath();
 			getLogger().trace("Context: {}", context);
 			FacesContext.getCurrentInstance().getExternalContext().redirect(context + LOGIN_PAGE);
 		}
@@ -115,12 +115,6 @@ public class LoginBean extends RoomSharerBean
 		}
 	}
 	
-	
-	private String getContext()
-	{
-		String result = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-		return (result == null) ? "" : (!result.startsWith("/") ? "/" : "") + result;
-	}
 	
 	private void saveAndRedirectAfterWrongLogin()
 	{
@@ -139,5 +133,11 @@ public class LoginBean extends RoomSharerBean
 		{
 			getLogger().error("Couldn't redirect to after wrong log in", url, e);
 		}
+	}
+	
+	private String getRequestContextPath()
+	{
+		String result = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+		return (result == null) ? "" : (!result.isEmpty() && !result.startsWith("/") ? "/" : "") + result;
 	}
 }

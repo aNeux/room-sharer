@@ -48,11 +48,25 @@ task copyWar(type: Copy, dependsOn: war) {
     into 'jetty/webapps/'
 }
 
-task runRoomSharer(type: JavaExec,  group: 'Room-Sharer',
-        description: 'Builds WAR file, deploys it to Jetty and starts Jetty with remote debugging enabled',
-        dependsOn: copyWar) {
+task runRoomSharer(type: JavaExec,  group: 'Room-Sharer', dependsOn: copyWar) {
     workingDir = file('jetty')
     classpath = files('jetty/start.jar')
     main = 'org.eclipse.jetty.start.Main'
     jvmArgs '-Xdebug', '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
+}
+
+task releaseBuild(type: Zip, group: 'Room-Sharer', dependsOn: war) {
+    from('.') {
+        include 'cfg/'
+        exclude 'cfg/users_rooms/'
+    }
+
+    from('build/libs/') {
+        include "${war_name}"
+    }
+
+    archiveBaseName = 'roomsharer'
+    archiveVersion = new Date().format('ddMMyyyy.HHmm')
+    archiveExtension = 'zip'
+    destinationDirectory = file("$buildDir/release")
 }

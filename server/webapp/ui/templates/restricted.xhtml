@@ -20,14 +20,36 @@
 				</c:if>
 			</b:navbarLinks>
 			
-			<div class="navbar-form navbar-right" style="position: absolute; right: 100px;">
-				<h:outputText id="userNameSpan" value="#{userBean.userName}" />
-				<button class="btn btn-default" onclick="PF('logoutConfirmDialog').show();">Выйти</button>
+			<div class="navbar-form navbar-right" style="margin-right: 40px;">
+				<b:dropMenu value="#{userBean.userName}" styleClass="userNameDropMenu">
+					<b:navCommandLink value="Изменить пароль" actionListener="#{userBean.preChangePassword}"
+					                  oncomplete="PF('changePasswordDialog').show();" ajax="true" iconAwesome="user-secret" />
+					<b:navCommandLink value="Выйти" onclick="PF('logoutConfirmDialog').show();" ajax="true" iconAwesome="sign-out" />
+				</b:dropMenu>
 			</div>
 		</b:navBar>
 		
-		<p:confirmDialog message="Вы уверены, что хотите завершить сессию?" width="450" header="Выйти"
-		                 severity="alert" widgetVar="logoutConfirmDialog" closeOnEscape="true" modal="true">
+		<p:dialog header="Изменение пароля" id="ChangePasswordDlg" widgetVar="changePasswordDialog"
+		          resizable="false" closeOnEscape="false" modal="true" width="300">
+			<h:form id="ChangePasswordDialog">
+				<b:inputSecret label="Старый пароль*:" value="#{userBean.oldPassword}" maxlength="70" />
+				<b:inputSecret label="Новый пароль*:" value="#{userBean.newPassword}" maxlength="70" />
+				<b:inputSecret label="Повторите новый пароль*:" value="#{userBean.newPasswordRepeated}" maxlength="70" />
+				
+				<div style="float: right;">
+					<b:commandButton value="Изменить" actionListener="#{userBean.changePassword}"
+					                 oncomplete="document.getElementById('ChangePasswordDialog:hiddenSubmitButton').click();"
+					                 ajax="true" update=":Growl :ChangePasswordDialog:hiddenSubmitButton" iconAwesome="check" />
+					<!-- Workaround to close dialog by managed bean marker -->
+					<p:commandButton style="display: none;" id="hiddenSubmitButton" ajax="true"
+					                 onclick="if (#{userBean.changePasswordDialogCanClose}) PF('changePasswordDialog').hide();" />
+					<b:commandButton value="Отмена" oncomplete="PF('changePasswordDialog').hide();" ajax="true" iconAwesome="times" style="margin-left: 10px;" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<p:confirmDialog header="Выйти" message="Вы уверены, что хотите завершить сессию?" severity="alert"
+		                 widgetVar="logoutConfirmDialog" closeOnEscape="true" modal="true">
 			<h:form id="LogoutConfirmDialog">
 				<p:commandButton value="Да" ajax="false" action="login?faces-redirect=true" actionListener="#{loginBean.logout()}" />
 				<p:commandButton value="Нет" onclick="PF('logoutConfirmDialog').hide();" type="button" />
@@ -36,7 +58,7 @@
 		
 		<p:outputPanel id="pageContainer">
 			<h:form>
-				<p:poll interval="30" autostart="true" />
+				<p:poll interval="10" autostart="true" />
 			</h:form>
 			<div>
 				<ui:insert name="content"></ui:insert>
@@ -49,7 +71,7 @@
 	</ui:define>
 	
 	<ui:define name="status">
-		<p:ajaxStatus style="position: absolute; top:10px; right: 35px;">
+		<p:ajaxStatus style="position: absolute; top:10px; right: 30px;">
 			<f:facet name="start">
 				<h:graphicImage width="32" value="/images/loading.gif" />
 			</f:facet>

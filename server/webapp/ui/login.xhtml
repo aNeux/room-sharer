@@ -18,8 +18,8 @@
 			<h:form id="loginPanel">
 				<div id="roomSharerLoginImageContainer"><img src="../images/room-sharer-logo.png" style="width: 100%; height: 100%" /></div>
 				<b:focus context="loginPanel" />
-				<b:inputText placeholder="Имя пользователя" value="#{loginBean.userName}" maxlength="100" />
-				<b:inputSecret placeholder="Пароль" value="#{loginBean.password}" maxlength="100" />
+				<b:inputText placeholder="Имя пользователя" value="#{loginBean.userName}" maxlength="70" />
+				<b:inputSecret placeholder="Пароль" value="#{loginBean.password}" maxlength="70" />
 				<b:commandButton style="width: 100%" value="Войти" action="#{loginBean.login}" ajax="false" />
 			</h:form>
 			

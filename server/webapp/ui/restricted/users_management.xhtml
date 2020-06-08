@@ -2,38 +2,103 @@
 <ui:composition xmlns="http://www.w3c.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
                 template="../templates/restricted.xhtml">
 	
 	<ui:define name="title">Пользователи</ui:define>
 	
 	<ui:define name="content">
+		<h:form id="Users">
+			<div style="margin-bottom: 10px;">
+				<b:commandButton value="Новый пользователь" actionListener="#{usersManagementBean.preNewUser}" oncomplete="PF('userPropsDialog').show();"
+				                 ajax="true" update=":UserPropsDlg :UserPropsDialog" iconAwesome="user-plus" />
+				<b:commandButton actionListener="#{usersManagementBean.forceLoadingUsersFromFile}" ajax="true"
+				                 update="usersTable" style="margin-left: 10px;" iconAwesome="refresh" />
+				
+				<p:outputPanel id="Operations" style="float: right;">
+					<b:commandButton value="Изменить" actionListener="#{usersManagementBean.preEditUser}" oncomplete="PF('userPropsDialog').show();"
+					                 ajax="true" update=":UserPropsDlg :UserPropsDialog" iconAwesome="pencil-square-o"
+					                 rendered="#{usersManagementBean.selectedIndexesString.length() == 1}" />
+					<b:commandButton value="Удалить" oncomplete="PF('removeSelectedUsersDialog').show();" ajax="true"
+					                 iconAwesome="trash-o" style="margin-left: 10px;" rendered="#{!usersManagementBean.selectedIndexesString.equals('-1')}" />
+					<b:commandButton value="Закрыть сессии" oncomplete="PF('closeSelectedUsersSessionsDialog').show();" ajax="true"
+					                 iconAwesome="chain-broken" style="margin-left: 10px;" rendered="#{usersManagementBean.someSelectedUsersOnline}" />
+				</p:outputPanel>
+			</div>
+			
+			<b:dataTable id="usersTable" var="user" value="#{usersManagementBean.users}" style="width: 100%;"
+			             paginated="false" searching="false" info="false" update="Operations"
+			             select="true" selectedItems="rows" selectionMode="multiple" selection-info="false"
+			             onselect="ajax:usersManagementBean.onSelectRows(indexes);"
+			             ondeselect="ajax:usersManagementBean.onDeselectRows(indexes);"
+			             selectedRow="#{usersManagementBean.selectedIndexesString}">
+				<b:dataTableColumn label="Имя пользователя" headerStyle="text-align: center;" width="20%" value="#{user.userName}" />
+				<b:dataTableColumn label="Имя" headerStyle="text-align: center;" width="15%" value="#{user.firstName}" />
+				<b:dataTableColumn label="Фамилия" headerStyle="text-align: center;" width="15%" value="#{user.lastName}" />
+				<b:dataTableColumn label="Кафедра" headerStyle="text-align: center;" width="30%" value="#{user.department}" />
+				<b:dataTableColumn label="Администратор?" style="text-align: center;" width="10%" value="#{user.admin ? 'Да' : ''}" />
+				<b:dataTableColumn label="Статус" style="text-align: center;" width="10%">
+					<h:outputText value="#{user.online ? 'Online' : ''}" style="color: #08B908;"/>
+					<h:outputText rendered="#{user.online}" value=" (#{user.sessionsCount})" />
+				</b:dataTableColumn>
+			</b:dataTable>
+		</h:form>
 		
-		<div style="width: 100%;">
-			<p:dataTable var="user" value="#{usersManagementBean.users}" rowKey="#{user.userName}">
-				<p:column headerText="Имя пользователя">
-					<h:outputText value="#{user.userName}" />
-				</p:column>
-				<p:column headerText="Имя">
-					<h:outputText value="#{user.firstName}" />
-				</p:column>
-				<p:column headerText="Фамилия">
-					<h:outputText value="#{user.lastName}" />
-				</p:column>
-				<p:column headerText="Кафедра">
-					<h:outputText value="#{user.department}" />
-				</p:column>
-				<p:column headerText="Администратор?" style="width: 170px; text-align: center;">
-					<h:outputText rendered="#{user.admin}" value="Да" />
-				</p:column>
-				<p:column headerText="Статус" style="width: 100px; text-align: center;">
-					<h:outputText rendered="#{user.online}" value="Online" style="color: #08B908;" />
-				</p:column>
-			</p:dataTable>
-		</div>
+		<p:dialog header="#{usersManagementBean.creatingNewUser ? 'Новый пользователь' : 'Редактирование пользователя'}"
+		          id="UserPropsDlg" widgetVar="userPropsDialog" resizable="false" closeOnEscape="false" modal="true" width="450">
+			<h:form id="UserPropsDialog">
+				<b:inputText label="Имя пользователя#{usersManagementBean.creatingNewUser ? '*' : ''}" value="#{usersManagementBean.editableUser.userName}"
+				             maxlength="70" disabled="#{!usersManagementBean.creatingNewUser}" />
+				<div>
+					<h:outputLabel id="passwordLabel" value="Пароль#{usersManagementBean.creatingNewUser || !usersManagementBean.notChangePassword ? '*' : ''}:" />
+					<p:outputPanel rendered="#{!usersManagementBean.creatingNewUser}" style="display: inline-block; margin-left: 5px;">
+						<h:outputText value="(не изменять" />
+						<p:selectBooleanCheckbox value="#{usersManagementBean.notChangePassword}" style="margin: 0 5px 0 5px;">
+							<p:ajax event="change" update="passwordLabel passwordInput" />
+						</p:selectBooleanCheckbox>
+						<h:outputText value=")" /><br/>
+					</p:outputPanel>
+					<b:inputSecret id="passwordInput" value="#{usersManagementBean.editableUserPasswordText}" maxlength="70"
+					               disabled="#{!(usersManagementBean.creatingNewUser || !usersManagementBean.notChangePassword)}" />
+				</div>
+				<b:inputText label="Имя:" value="#{usersManagementBean.editableUser.firstName}" maxlength="70" />
+				<b:inputText label="Фамилия:" value="#{usersManagementBean.editableUser.lastName}" maxlength="70" />
+				<b:inputText label="Кафедра:" value="#{usersManagementBean.editableUser.department}" maxlength="70" />
+				<div>
+					<h:outputLabel value="Администратор?" />
+					<p:selectBooleanCheckbox value="#{usersManagementBean.editableUser.admin}" style="margin-left: 10px;" />
+				</div>
+				
+				<div style="float: right;">
+					<b:commandButton value="Сохранить" actionListener="#{usersManagementBean.saveEditableUser}"
+					                 oncomplete="document.getElementById('UserPropsDialog:hiddenSubmitButton').click();"
+					                 ajax="true" update=":Growl :Users :UserPropsDialog:hiddenSubmitButton" iconAwesome="check" />
+					<!-- Workaround to close dialog by managed bean marker -->
+					<p:commandButton style="display: none;" id="hiddenSubmitButton" ajax="true"
+					                 onclick="if (#{usersManagementBean.canClose}) PF('userPropsDialog').hide();" />
+					<b:commandButton value="Отмена" oncomplete="PF('userPropsDialog').hide();" ajax="true" iconAwesome="times" style="margin-left: 10px;" />
+				</div>
+			</h:form>
+		</p:dialog>
 		
+		<p:confirmDialog header="Удалить пользователей" message="Вы уверены, что хотите удалить выбранных пользователей?" severity="alert"
+		                 widgetVar="removeSelectedUsersDialog" closeOnEscape="true" modal="true">
+			<h:form id="RemoveSelectedUsersDialog">
+				<p:commandButton value="Да" actionListener="#{usersManagementBean.removeSelectedUsers()}"
+				                 oncomplete="PF('removeSelectedUsersDialog').hide();" ajax="true" update=":Growl :Users" />
+				<p:commandButton value="Нет" onclick="PF('removeSelectedUsersDialog').hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog header="Закрыть сессии" message="Вы уверены, что хотите завершить сессии у выбранных пользователей?" severity="alert"
+		                 widgetVar="closeSelectedUsersSessionsDialog" closeOnEscape="true" modal="true">
+			<h:form id="CloseSelectedUsersSessionsDialog">
+				<p:commandButton value="Да" actionListener="#{usersManagementBean.closeSelectedUsersSessions()}"
+				                 oncomplete="PF('closeSelectedUsersSessionsDialog').hide();" ajax="true" update=":Growl :Users" />
+				<p:commandButton value="Нет" onclick="PF('closeSelectedUsersSessionsDialog').hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>
 	</ui:define>
 
 </ui:composition>

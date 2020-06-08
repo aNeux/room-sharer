@@ -1,6 +1,5 @@
 package ru.ksu.room_sharer.server.web.filters;
 
-import org.apache.commons.lang3.StringUtils;
 import ru.ksu.room_sharer.server.web.beans.LoginBean;
 
 import javax.servlet.*;
@@ -20,8 +19,7 @@ public class AuthenticationFilter implements Filter
 		HttpServletRequest servletRequest = (HttpServletRequest)request;
 		HttpSession session = servletRequest.getSession();
 		String context = servletRequest.getContextPath();
-		if (StringUtils.isNotEmpty(context) && !context.startsWith("/"))
-			context = "/" + context;
+		context = context == null ? "" : (!context.isEmpty() && !context.startsWith("/") ? "/" : "") + context;
 		HttpServletResponse servletResponse = (HttpServletResponse)response;
 		
 		if (session.getAttribute(LoginBean.AUTH_KEY) == null)
@@ -34,7 +32,7 @@ public class AuthenticationFilter implements Filter
 		{
 			String requestedPage = servletRequest.getRequestURI();
 			requestedPage = requestedPage.substring(requestedPage.lastIndexOf('/') + 1, requestedPage.lastIndexOf('.'));
-			if (session.getAttribute(LoginBean.ADMIN_KEY) == null && (!("common_rooms".equals(requestedPage) || "my_rooms".equals(requestedPage))))
+			if (!(boolean)session.getAttribute(LoginBean.ADMIN_KEY) && (!("common_rooms".equals(requestedPage) || "my_rooms".equals(requestedPage))))
 				servletResponse.sendRedirect(context + LoginBean.COMMON_ROOMS_PAGE); // Only admins could access users management and settings pages
 			else
 				chain.doFilter(request, servletResponse); // No restrictions found to process request
