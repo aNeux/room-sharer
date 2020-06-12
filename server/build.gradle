@@ -44,7 +44,7 @@ war {
 }
 
 task copyWar(type: Copy, dependsOn: war) {
-    from "build/libs/${war_name}"
+    from "$buildDir/libs/${war_name}"
     into 'jetty/webapps/'
 }
 
@@ -61,11 +61,11 @@ task releaseBuild(type: Zip, group: 'Room-Sharer', dependsOn: war) {
         exclude 'cfg/users_rooms/'
     }
 
-    from('build/libs/') {
+    from("$buildDir/libs/") {
         include "${war_name}"
     }
 
-    archiveBaseName = 'roomsharer'
+    archiveBaseName = 'roomsharer-server'
     archiveVersion = new Date().format('ddMMyyyy.HHmm')
     archiveExtension = 'zip'
     destinationDirectory = file("$buildDir/release")

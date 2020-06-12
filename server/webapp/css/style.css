@@ -84,7 +84,7 @@ img {
 	color: #878787;
 }
 
-.userNameDropMenu a, a:hover, a:focus {
+.userNameDropMenu > a, .userNameDropMenu > a:hover, .userNameDropMenu > a:focus {
 	color: #878787;
 }
 
@@ -109,6 +109,20 @@ img {
 	text-align: right;
 	font-size: 0.813em;
 	color: #777777;
+}
+
+.wellRoomStats {
+	display: flex;
+	align-items: center;
+}
+
+#wellRightButtonsContainer {
+	margin-left: auto;
+	margin-right: 0;
+}
+
+.panel-heading > a:hover, .panel-heading > a:focus {
+	text-decoration: none;
 }
 
 .ui-widget.ui-chkbox .ui-widget.ui-chkbox-box {

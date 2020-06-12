@@ -2,8 +2,13 @@ plugins {
     id 'application'
 }
 
+ext {
+    jar_name = 'room-sharer.jar'
+}
+
 version '1.0-alpha'
 mainClassName = 'ru.ksu.room_sharer.client.Starter'
+compileJava.options.encoding = 'UTF-8'
 
 sourceSets {
     main {
@@ -21,5 +26,26 @@ dependencies {
 }
 
 jar {
+    archiveFileName = jar_name
     manifest.attributes("Main-Class": mainClassName)
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task releaseBuild(type: Zip, group: 'Room-Sharer', dependsOn: jar) {
+    from ("$buildDir/libs/") {
+        include "${jar_name}"
+    }
+
+    from('.') {
+        include 'room-sharer.cfg'
+        include 'log.properties'
+    }
+
+    archiveBaseName = 'roomsharer-client'
+    archiveVersion = new Date().format('ddMMyyyy.HHmm')
+    archiveExtension = 'zip'
+    destinationDirectory = file("$buildDir/release")
 }

@@ -22,7 +22,7 @@ public class HeartBeating extends Thread
 	
 	public HeartBeating(LanNetworkInfo lanNetworkInfo, Configuration config)
 	{
-		super(HeartBeating.class.getSimpleName() + "_thread");
+		super(HeartBeating.class.getSimpleName());
 		this.lanNetworkInfo = lanNetworkInfo;
 		this.config = config;
 	}

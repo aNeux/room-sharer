@@ -12,8 +12,8 @@
 		
 		<b:navBar brand="Room Sharer" fluid="true">
 			<b:navbarLinks>
-				<b:navLink value="Общие кабинеты" href="#{request.contextPath}/ui/restricted/common_rooms.jsf" active="#{guiBean.pageName == 'common_rooms'}" />
-				<b:navLink value="Мои кабинеты" href="#{request.contextPath}/ui/restricted/my_rooms.jsf" active="#{guiBean.pageName == 'my_rooms'}" />
+				<b:navLink value="Общие классы" href="#{request.contextPath}/ui/restricted/common_rooms.jsf" active="#{guiBean.pageName == 'common_rooms'}" />
+				<b:navLink value="Мои классы" href="#{request.contextPath}/ui/restricted/user_rooms.jsf" active="#{guiBean.pageName == 'user_rooms'}" />
 				<c:if test="#{userBean.admin}">
 					<b:navLink value="Пользователи" href="#{request.contextPath}/ui/restricted/users_management.jsf" active="#{guiBean.pageName == 'users_management'}" />
 					<b:navLink value="Настройки" href="#{request.contextPath}/ui/restricted/settings.jsf" active="#{guiBean.pageName == 'settings'}" />
@@ -50,9 +50,9 @@
 		
 		<p:confirmDialog header="Выйти" message="Вы уверены, что хотите завершить сессию?" severity="alert"
 		                 widgetVar="logoutConfirmDialog" closeOnEscape="true" modal="true">
-			<h:form id="LogoutConfirmDialog">
-				<p:commandButton value="Да" ajax="false" action="login?faces-redirect=true" actionListener="#{loginBean.logout()}" />
-				<p:commandButton value="Нет" onclick="PF('logoutConfirmDialog').hide();" type="button" />
+			<h:form>
+				<b:commandButton value="Да" actionListener="#{loginBean.logout()}" action="login?faces-redirect=true" ajax="false" />
+				<b:commandButton value="Нет" onclick="PF('logoutConfirmDialog').hide();" ajax="true" type="button" />
 			</h:form>
 		</p:confirmDialog>
 		

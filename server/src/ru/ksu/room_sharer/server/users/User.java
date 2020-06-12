@@ -6,7 +6,7 @@ import ru.ksu.room_sharer.server.web.misc.users.UserSessionCollector;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
-public class User implements Serializable
+public class User implements Serializable, Cloneable
 {
 	private static final long serialVersionUID = 4036767858855957808L;
 	

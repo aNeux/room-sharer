@@ -19,7 +19,7 @@ public class RoomSharerApplicationBean extends RoomSharerBean
 			RoomSharerApplicationBean.appInstance = this;
 		}
 		
-		System.out.println("Starting Room-Sharer web application..");
+		System.out.println("Starting Room-Sharer web application");
 		AppConfig appConfig = new AppConfig("room-sharer.cfg");
 		DeploymentConfig deploymentConfig = new DeploymentConfig(appConfig);
 		appContextPath = deploymentConfig.getAppContextPath();

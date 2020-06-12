@@ -32,7 +32,7 @@ public class AuthenticationFilter implements Filter
 		{
 			String requestedPage = servletRequest.getRequestURI();
 			requestedPage = requestedPage.substring(requestedPage.lastIndexOf('/') + 1, requestedPage.lastIndexOf('.'));
-			if (!(boolean)session.getAttribute(LoginBean.ADMIN_KEY) && (!("common_rooms".equals(requestedPage) || "my_rooms".equals(requestedPage))))
+			if (!(boolean)session.getAttribute(LoginBean.ADMIN_KEY) && (!("common_rooms".equals(requestedPage) || "user_rooms".equals(requestedPage))))
 				servletResponse.sendRedirect(context + LoginBean.COMMON_ROOMS_PAGE); // Only admins could access users management and settings pages
 			else
 				chain.doFilter(request, servletResponse); // No restrictions found to process request

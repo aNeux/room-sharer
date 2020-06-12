@@ -13,7 +13,7 @@
 			<div style="margin-bottom: 10px;">
 				<b:commandButton value="Новый пользователь" actionListener="#{usersManagementBean.preNewUser}" oncomplete="PF('userPropsDialog').show();"
 				                 ajax="true" update=":UserPropsDlg :UserPropsDialog" iconAwesome="user-plus" />
-				<b:commandButton actionListener="#{usersManagementBean.forceLoadingUsersFromFile}" ajax="true"
+				<b:commandButton value="Обновить" actionListener="#{usersManagementBean.forceLoadingUsersFromFile}" ajax="true"
 				                 update="usersTable" style="margin-left: 10px;" iconAwesome="refresh" />
 				
 				<p:outputPanel id="Operations" style="float: right;">
@@ -76,7 +76,7 @@
 					                 ajax="true" update=":Growl :Users :UserPropsDialog:hiddenSubmitButton" iconAwesome="check" />
 					<!-- Workaround to close dialog by managed bean marker -->
 					<p:commandButton style="display: none;" id="hiddenSubmitButton" ajax="true"
-					                 onclick="if (#{usersManagementBean.canClose}) PF('userPropsDialog').hide();" />
+					                 onclick="if (#{usersManagementBean.userDialogCanClose}) PF('userPropsDialog').hide();" />
 					<b:commandButton value="Отмена" oncomplete="PF('userPropsDialog').hide();" ajax="true" iconAwesome="times" style="margin-left: 10px;" />
 				</div>
 			</h:form>
@@ -85,18 +85,18 @@
 		<p:confirmDialog header="Удалить пользователей" message="Вы уверены, что хотите удалить выбранных пользователей?" severity="alert"
 		                 widgetVar="removeSelectedUsersDialog" closeOnEscape="true" modal="true">
 			<h:form id="RemoveSelectedUsersDialog">
-				<p:commandButton value="Да" actionListener="#{usersManagementBean.removeSelectedUsers()}"
+				<b:commandButton value="Да" actionListener="#{usersManagementBean.removeSelectedUsers()}"
 				                 oncomplete="PF('removeSelectedUsersDialog').hide();" ajax="true" update=":Growl :Users" />
-				<p:commandButton value="Нет" onclick="PF('removeSelectedUsersDialog').hide();" type="button" />
+				<b:commandButton value="Нет" onclick="PF('removeSelectedUsersDialog').hide();" ajax="true" type="button" />
 			</h:form>
 		</p:confirmDialog>
 		
 		<p:confirmDialog header="Закрыть сессии" message="Вы уверены, что хотите завершить сессии у выбранных пользователей?" severity="alert"
 		                 widgetVar="closeSelectedUsersSessionsDialog" closeOnEscape="true" modal="true">
 			<h:form id="CloseSelectedUsersSessionsDialog">
-				<p:commandButton value="Да" actionListener="#{usersManagementBean.closeSelectedUsersSessions()}"
+				<b:commandButton value="Да" actionListener="#{usersManagementBean.closeSelectedUsersSessions()}"
 				                 oncomplete="PF('closeSelectedUsersSessionsDialog').hide();" ajax="true" update=":Growl :Users" />
-				<p:commandButton value="Нет" onclick="PF('closeSelectedUsersSessionsDialog').hide();" type="button" />
+				<b:commandButton value="Нет" onclick="PF('closeSelectedUsersSessionsDialog').hide();" ajax="true" type="button" />
 			</h:form>
 		</p:confirmDialog>
 	</ui:define>

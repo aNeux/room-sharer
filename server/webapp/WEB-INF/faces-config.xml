@@ -29,8 +29,14 @@
 	</managed-bean>
 	
 	<managed-bean>
-		<managed-bean-name>roomsBean</managed-bean-name>
-		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.RoomsBean</managed-bean-class>
+		<managed-bean-name>commonRoomsBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.rooms.CommonRoomsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>userRoomsBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.rooms.UserRoomsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3c.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
+                template="../templates/restricted.xhtml">
+	
+	<ui:define name="title">Мои классы</ui:define>
+	
+	<ui:define name="content">
+		<h:form id="UserRooms">
+			<b:well styleClass="wellRoomStats">
+				<div>
+					Всего классов: <strong><h:outputText value="#{userRoomsBean.rooms.size()}" /></strong><br/>
+					Онлайн: <strong><h:outputText value="#{userRoomsBean.onlineClientsCount}" /></strong>
+					/ <strong><h:outputText value="#{userRoomsBean.totalClientsCount}" /></strong>
+				</div>
+				<div id="wellRightButtonsContainer">
+					<b:commandButton value="Новый класс" actionListener="#{userRoomsBean.preNewRoom}" oncomplete="PF('editUserRoomDialog').show();"
+					                 ajax="true" update=":EditUserRoomDlg :EditUserRoomDialog" style="margin-right: 10px;" iconAwesome="plus" />
+					<b:commandButton value="Обновить" actionListener="#{userRoomsBean.forceLoadingRoomsFromFile}" ajax="true" update="UserRooms" iconAwesome="refresh" />
+				</div>
+			</b:well>
+			
+			<b:panelGrid columns="3">
+				<c:forEach var="room" items="#{userRoomsBean.rooms}">
+					<b:panel collapsed="#{userRoomsBean.rooms.size() > 8}">
+						<f:facet name="heading">
+							<i class="fa fa-list-alt" style="padding-right: 10px;" />
+							<h:outputText value="#{room.name} (#{userRoomsBean.getOnlineClientsCount(room)} / #{room.clients.size()})" />
+							<b:commandButton iconAwesome="external-link" style="margin-left: 15px;" />
+							<b:commandButton actionListener="#{userRoomsBean.preEditRoom(room)}" oncomplete="PF('editUserRoomDialog').show();"
+							                 ajax="true" update=":EditUserRoomDlg :EditUserRoomDialog" iconAwesome="pencil-square-o" style="margin-left: 10px;" />
+							<b:commandButton actionListener="#{userRoomsBean.preRemoveSelectedRoom(room)}" oncomplete="PF('removeSelectedUserRoomDialog').show();"
+							                 ajax="true" update=":RemoveSelectedUserRoomDlg :RemoveSelectedUserRoomDialog" iconAwesome="trash-o" style="margin-left: 10px;" />
+						</f:facet>
+						<ul>
+							<c:forEach var="client" items="#{room.clients}">
+								<li>
+									<h:outputText value="#{client.pseudoName}" rendered="#{!client.pseudoName.isEmpty()}" />
+									<h:outputText value="#{!client.pseudoName.isEmpty() ? (' (' += client.hostName += ')') : client.hostName} " />
+									<h:outputText value="&lt;#{client.address}&gt;" />
+									<b:badge style="margin-left: 10px; background-color: #5cb85c;" value="online" rendered="#{client.online}" />
+								</li>
+							</c:forEach>
+						</ul>
+					</b:panel>
+				</c:forEach>
+			</b:panelGrid>
+		</h:form>
+		
+		<p:dialog header="#{userRoomsBean.creatingNewRoom ? 'Новый класс' : 'Редактирование класса'}" id="EditUserRoomDlg"
+		          widgetVar="editUserRoomDialog" resizable="false" closeOnEscape="false" modal="true" width="700">
+			<h:form id="EditUserRoomDialog">
+				<b:inputText label="Название класса#{userRoomsBean.creatingNewRoom ? '*' : ''}:" value="#{userRoomsBean.editableRoomName}" maxlength="70" />
+				<b:dataTable id="clientsTable" var="client" value="#{userRoomsBean.editableRoom.clients}" style="width: 100%"
+				             paginated="false" searching="false" info="false" scrollSize="400px"
+				             select="true" selectedItems="rows" selectionMode="multiple" selection-info="false"
+				             onselect="ajax:userRoomsBean.onSelectClients(indexes);"
+				             selectedRow="#{userRoomsBean.selectedClientsIndexesString}"
+				             ondeselect="ajax:userRoomsBean.onDeselectClients(indexes);"
+				             caption="Выберите компьютеры, которые необходимо включить в класс:">
+					<b:dataTableColumn selection-mode="multiple" style="text-align: center;" width="5%" />
+					<b:dataTableColumn label="Имя" headerStyle="text-align: center;" width="35%">
+						<p:inputText value="#{client.pseudoName}" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Хост" headerStyle="text-align: center;" value="#{client.hostName}" width="30%" />
+					<b:dataTableColumn label="IP-адрес" headerStyle="text-align: center;" value="#{client.address}" width="30%" />
+				</b:dataTable>
+				
+				<div style="margin-top: 10px; float: right;">
+					<b:commandButton value="Сохранить" actionListener="#{userRoomsBean.saveEditableRoom}"
+					                 oncomplete="document.getElementById('EditUserRoomDialog:hiddenSubmitButton').click();"
+					                 ajax="true" update=":Growl :UserRooms :EditUserRoomDialog:hiddenSubmitButton" iconAwesome="check" />
+					<!-- Workaround to close dialog by managed bean marker -->
+					<p:commandButton style="display: none;" id="hiddenSubmitButton" ajax="true"
+					                 onclick="if (#{userRoomsBean.editRoomDialogCanClose}) PF('editUserRoomDialog').hide();" />
+					<b:commandButton value="Отмена" oncomplete="PF('editUserRoomDialog').hide();" ajax="true" iconAwesome="times" style="margin-left: 10px;" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<p:confirmDialog header="Удалить класс" message="Вы уверены, что хотите удалить класс '#{userRoomsBean.editableRoom.name}'?" severity="alert"
+		                 id="RemoveSelectedUserRoomDlg" widgetVar="removeSelectedUserRoomDialog" closeOnEscape="true" modal="true">
+			<h:form id="RemoveSelectedUserRoomDialog">
+				<b:commandButton value="Да" actionListener="#{userRoomsBean.removeSelectedRoom}"
+				                 oncomplete="PF('removeSelectedUserRoomDialog').hide();" ajax="true" update=":Growl :UserRooms" />
+				<b:commandButton value="Нет" onclick="PF('removeSelectedUserRoomDialog').hide();" ajax="true" type="button" />
+			</h:form>
+		</p:confirmDialog>
+	</ui:define>
+
+</ui:composition>

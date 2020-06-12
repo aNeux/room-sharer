@@ -3,6 +3,8 @@ package ru.ksu.room_sharer.server;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ksu.room_sharer.server.clients.ClientsManager;
+import ru.ksu.room_sharer.server.rooms.RoomsManager;
 import ru.ksu.room_sharer.server.users.UsersManager;
 import ru.ksu.room_sharer.server.web.misc.DeploymentConfig;
 
@@ -15,10 +17,12 @@ public class RoomSharer
 	private static RoomSharer instance = null;
 	private static Logger logger = LoggerFactory.getLogger(RoomSharer.class);
 	
-	private AppConfig appConfig;
 	private String appRoot, root;
 	
+	private AppConfig appConfig;
 	private UsersManager usersManager;
+	private ClientsManager clientsManager;
+	private RoomsManager roomsManager;
 	
 	public RoomSharer() throws RoomSharerException
 	{
@@ -44,8 +48,12 @@ public class RoomSharer
 		{
 			appConfig.init();
 			usersManager = new UsersManager(new File(getRootRelative(appConfig.getUsersFile())));
+			clientsManager = new ClientsManager(appConfig);
+			clientsManager.startListening();
 			
 			Files.createDirectories(Paths.get(getRootRelative(appConfig.getUsersRoomsDir())));
+			roomsManager = new RoomsManager(new File(getRootRelative(appConfig.getCommonRoomsFile())),
+					new File(getRootRelative(appConfig.getUsersRoomsDir())));
 		}
 		catch (Exception e)
 		{
@@ -58,7 +66,7 @@ public class RoomSharer
 	
 	public void beforeShutdown()
 	{
-	
+		clientsManager.stopListening();
 	}
 	
 	
@@ -85,7 +93,7 @@ public class RoomSharer
 	}
 	
 	
-	/* Application configuration */
+	/* Application configuration and managers */
 	
 	public AppConfig getAppConfig()
 	{
@@ -97,7 +105,16 @@ public class RoomSharer
 		return usersManager;
 	}
 	
-	/* Singleton static methods routines */
+	public ClientsManager getClientsManager()
+	{
+		return clientsManager;
+	}
+	
+	public RoomsManager getRoomsManager()
+	{
+		return roomsManager;
+	}
+	
 	
 	public static RoomSharer getInstance()
 	{

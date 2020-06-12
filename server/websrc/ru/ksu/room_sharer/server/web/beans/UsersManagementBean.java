@@ -25,7 +25,7 @@ public class UsersManagementBean extends RoomSharerBean
 	
 	private User editableUser;
 	private String editableUserPasswordText;
-	private boolean creatingNewUser, notChangePassword, canClose;
+	private boolean creatingNewUser, notChangePassword, userDialogCanClose;
 	
 	public UsersManagementBean()
 	{
@@ -34,7 +34,7 @@ public class UsersManagementBean extends RoomSharerBean
 		preNewUser();
 	}
 	
-	public void refreshUsersList()
+	private void refreshUsersList()
 	{
 		users = usersManager.getUsers();
 		selectedIndexes.clear();
@@ -87,7 +87,7 @@ public class UsersManagementBean extends RoomSharerBean
 		editableUserPasswordText = "";
 		creatingNewUser = true;
 		notChangePassword = false;
-		canClose = false;
+		userDialogCanClose = false;
 	}
 	
 	public void preEditUser()
@@ -96,7 +96,7 @@ public class UsersManagementBean extends RoomSharerBean
 		editableUserPasswordText = "";
 		creatingNewUser = false;
 		notChangePassword = true;
-		canClose = false;
+		userDialogCanClose = false;
 	}
 	
 	public User getEditableUser()
@@ -129,9 +129,9 @@ public class UsersManagementBean extends RoomSharerBean
 		return notChangePassword;
 	}
 	
-	public boolean isCanClose()
+	public boolean isUserDialogCanClose()
 	{
-		return canClose;
+		return userDialogCanClose;
 	}
 	
 	public void saveEditableUser()
@@ -159,7 +159,7 @@ public class UsersManagementBean extends RoomSharerBean
 				editableUser.setPassword(Utils.md5(editableUserPasswordText));
 			usersManager.saveUser(editableUser);
 			refreshUsersList();
-			canClose = true;
+			userDialogCanClose = true;
 			MessageUtils.addInfoMessage("Изменения были успешно сохранены");
 		}
 		catch (NoSuchAlgorithmException | IOException e)
@@ -197,20 +197,5 @@ public class UsersManagementBean extends RoomSharerBean
 			getLogger().error("Error on closing selected users sessions", e);
 			MessageUtils.addErrorMessage("Ошибка", "Не удалось закрыть у сессии выбранных пользователей");
 		}
-	}
-	
-	
-	private Set<Integer> parseIndexesString(String indexes)
-	{
-		Set<Integer> result = new HashSet<>();
-		if (indexes.length() == 1)
-			result.add(Integer.parseInt(indexes));
-		else
-		{
-			String[] splitted = indexes.substring(1, indexes.length() - 1).split(",");
-			for (String id : splitted)
-				result.add(Integer.parseInt(id));
-		}
-		return result;
 	}
 }

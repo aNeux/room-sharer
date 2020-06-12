@@ -1,5 +1,8 @@
 package ru.ksu.room_sharer.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -7,7 +10,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class Utils
 {
-	public static final String EOL = "/r/n", UTF8 = "UTF-8";
+	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
+	
+	public static final String EOL = "/r/n", UTF8 = "UTF-8", JSON_EXT = ".json";
 	
 	public static String md5(String originalString) throws NoSuchAlgorithmException, UnsupportedEncodingException
 	{
@@ -23,5 +28,18 @@ public class Utils
 		while (hashtext.length() < 32 )
 			hashtext = "0" + hashtext;
 		return hashtext;
+	}
+	
+	public static void closeResource(AutoCloseable resource)
+	{
+		try
+		{
+			if (resource != null)
+				resource.close();
+		}
+		catch (Exception e)
+		{
+			logger.error("Couldn't close resource", e);
+		}
 	}
 }

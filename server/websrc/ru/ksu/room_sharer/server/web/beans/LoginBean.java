@@ -1,6 +1,7 @@
 package ru.ksu.room_sharer.server.web.beans;
 
 import ru.ksu.room_sharer.server.RoomSharer;
+import ru.ksu.room_sharer.server.Utils;
 import ru.ksu.room_sharer.server.users.User;
 import ru.ksu.room_sharer.server.web.beans.init.RoomSharerBean;
 import ru.ksu.room_sharer.server.web.misc.MessageUtils;
@@ -10,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -62,7 +64,9 @@ public class LoginBean extends RoomSharerBean
 	
 	public void login()
 	{
-		User user = RoomSharer.getInstance().getUsersManager().isUserAllowed(userName, password);
+		RoomSharer roomSharer = RoomSharer.getInstance();
+		
+		User user = roomSharer.getUsersManager().isUserAllowed(userName, password);
 		if (user == null)
 		{
 			MessageUtils.addErrorMessage("Ошибка входа", "Неверное имя пользователя или пароль");
@@ -77,6 +81,21 @@ public class LoginBean extends RoomSharerBean
 		
 		initLogger();
 		getLogger().info("Logged in");
+		
+		try
+		{
+			// Create file with user rooms if not exist
+			File userRooms = new File(roomSharer.getRootRelative(roomSharer.getAppConfig().getUsersRoomsDir() + userName + Utils.JSON_EXT));
+			if (!userRooms.exists())
+				userRooms.createNewFile();
+			
+			// Load user rooms
+			roomSharer.getRoomsManager().loadRoomsList(userName);
+		}
+		catch (IOException e)
+		{
+			getLogger().error("Couldn't load rooms available for user '{}'", userName, e);
+		}
 		
 		try
 		{
