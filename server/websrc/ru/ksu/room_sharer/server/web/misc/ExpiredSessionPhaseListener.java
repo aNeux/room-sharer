@@ -23,9 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ExpiredSessionPhaseListener implements PhaseListener
 {
 	private static final long serialVersionUID = -418100930178106626L;
-	
 	private static final Logger logger = LoggerFactory.getLogger(ExpiredSessionPhaseListener.class);
-	private final static String SESSION_EXPIRED_PAGE_CONTEXT_PARAM = "session_expired_page";
 	
 	@Override
 	public void afterPhase(PhaseEvent event) { }
@@ -40,19 +38,10 @@ public class ExpiredSessionPhaseListener implements PhaseListener
 			ExternalContext ec = fc.getExternalContext();
 			HttpServletResponse response = (HttpServletResponse)ec.getResponse();
 			HttpServletRequest request = (HttpServletRequest)ec.getRequest();
-			
-			String page = ec.getInitParameter(SESSION_EXPIRED_PAGE_CONTEXT_PARAM);
-			if (page == null)
-			{
-				logger.error("Redirect page for expired session is not described in 'web.xml.'"
-						+ " Please, add context parameter '{}'", SESSION_EXPIRED_PAGE_CONTEXT_PARAM);
-				return;
-			}
-			
-			String url = ec.getRequestContextPath() + page;
 			if (ec.isResponseCommitted())
 				return;
 			
+			String url = ec.getRequestContextPath() + NavigationUtils.SESSION_EXPIRED_PAGE;
 			try
 			{
 				if ((rc != null && PrimeFaces.current().isAjaxRequest() || fc.getPartialViewContext().isPartialRequest())

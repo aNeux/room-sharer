@@ -6,9 +6,12 @@ import ru.ksu.room_sharer.server.clients.Client;
 import ru.ksu.room_sharer.server.clients.ClientsManager;
 import ru.ksu.room_sharer.server.rooms.Room;
 import ru.ksu.room_sharer.server.rooms.RoomsManager;
+import ru.ksu.room_sharer.server.web.beans.WatchBean;
 import ru.ksu.room_sharer.server.web.beans.init.RoomSharerBean;
 import ru.ksu.room_sharer.server.web.misc.MessageUtils;
+import ru.ksu.room_sharer.server.web.misc.NavigationUtils;
 
+import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -89,6 +92,15 @@ public abstract class RoomsBean extends RoomSharerBean
 	}
 	
 	
+	/* Redirect to watch page with selected room saved to session map */
+	
+	public String redirectToWatchRoom(Room selectedRoom)
+	{
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(WatchBean.WATCHING_ROOM_KEY, selectedRoom);
+		return NavigationUtils.WATCH_PAGE_SHORT + "?faces-redirect=true";
+	}
+	
+	
 	/* Adding and editing room dialog */
 	
 	public void preNewRoom()
@@ -111,7 +123,7 @@ public abstract class RoomsBean extends RoomSharerBean
 		
 		// Auto select already added clients on top
 		clientsSelectedIndexes.clear();
-		for (int i = 0; i < editableRoom.getClients().size(); i++)
+		for (int i = 0; i < this.editableRoom.getClients().size(); i++)
 			clientsSelectedIndexes.add(i);
 		
 		creatingNewRoom = false;
@@ -182,12 +194,12 @@ public abstract class RoomsBean extends RoomSharerBean
 			roomsManager.saveRoom(roomsAvailableFor(), editableRoom, editableRoomName);
 			refreshRoomsList();
 			editRoomDialogCanClose = true;
-			MessageUtils.addInfoMessage("Класс был успешно создан");
+			MessageUtils.addInfoMessage(creatingNewRoom ? "Новый класс был успешно создан" : "Изменения в классе были успешно применены");
 		}
 		catch (IOException e)
 		{
-			getLogger().error("Error occurred while adding new room", e);
-			MessageUtils.addErrorMessage("Ошибка", "Не удалось создать новый класс");
+			getLogger().error("Error occurred while creating new room or editing existing one", e);
+			MessageUtils.addErrorMessage("Ошибка", "Не удалось " + (creatingNewRoom ? "создать новый класс" : "сохранить внесенные изменения"));
 		}
 	}
 	

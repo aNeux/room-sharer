@@ -29,12 +29,15 @@
 				<c:forEach var="room" items="#{userRoomsBean.rooms}">
 					<b:panel collapsed="#{userRoomsBean.rooms.size() > 8}">
 						<f:facet name="heading">
-							<i class="fa fa-list-alt" style="padding-right: 10px;" />
+							<i class="fa fa-list-alt" style="padding-right: 10px;" id="panelHeaderUser_#{room.name.replace(' ', '')}" />
 							<h:outputText value="#{room.name} (#{userRoomsBean.getOnlineClientsCount(room)} / #{room.clients.size()})" />
-							<b:commandButton iconAwesome="external-link" style="margin-left: 15px;" />
-							<b:commandButton actionListener="#{userRoomsBean.preEditRoom(room)}" oncomplete="PF('editUserRoomDialog').show();"
+							<b:commandButton action="#{userRoomsBean.redirectToWatchRoom(room)}" onclick="$('#panelHeaderUser_#{room.name.replace(' ', '')}').click();"
+							                 ajax="true" iconAwesome="external-link" style="margin-left: 15px;" />
+							<b:commandButton actionListener="#{userRoomsBean.preEditRoom(room)}"
+							                 oncomplete="$('#panelHeaderUser_#{room.name.replace(' ', '')}').click(); PF('editUserRoomDialog').show();"
 							                 ajax="true" update=":EditUserRoomDlg :EditUserRoomDialog" iconAwesome="pencil-square-o" style="margin-left: 10px;" />
-							<b:commandButton actionListener="#{userRoomsBean.preRemoveSelectedRoom(room)}" oncomplete="PF('removeSelectedUserRoomDialog').show();"
+							<b:commandButton actionListener="#{userRoomsBean.preRemoveSelectedRoom(room)}"
+							                 oncomplete="$('#panelHeaderUser_#{room.name.replace(' ', '')}').click(); PF('removeSelectedUserRoomDialog').show();"
 							                 ajax="true" update=":RemoveSelectedUserRoomDlg :RemoveSelectedUserRoomDialog" iconAwesome="trash-o" style="margin-left: 10px;" />
 						</f:facet>
 						<ul>

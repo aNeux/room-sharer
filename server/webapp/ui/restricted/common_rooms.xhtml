@@ -29,12 +29,15 @@
 				<c:forEach var="room" items="#{commonRoomsBean.rooms}">
 					<b:panel collapsed="#{commonRoomsBean.rooms.size() > 8}">
 						<f:facet name="heading">
-							<i class="fa fa-list-alt" style="padding-right: 10px;" />
+							<i class="fa fa-list-alt" style="padding-right: 10px;" id="panelHeaderCommon_#{room.name.replace(' ', '')}" />
 							<h:outputText value="#{room.name} (#{commonRoomsBean.getOnlineClientsCount(room)} / #{room.clients.size()})" />
-							<b:commandButton iconAwesome="external-link" style="margin-left: 15px;" />
-							<b:commandButton actionListener="#{commonRoomsBean.preEditRoom(room)}" oncomplete="PF('editCommonRoomDialog').show();"
+							<b:commandButton action="#{commonRoomsBean.redirectToWatchRoom(room)}" onclick="$('#panelHeaderCommon_#{room.name.replace(' ', '')}').click();"
+							                 ajax="true" iconAwesome="external-link" style="margin-left: 15px;" />
+							<b:commandButton actionListener="#{commonRoomsBean.preEditRoom(room)}"
+							                 oncomplete="$('#panelHeaderCommon_#{room.name.replace(' ', '')}').click(); PF('editCommonRoomDialog').show();"
 							                 ajax="true" update=":EditCommonRoomDlg :EditCommonRoomDialog" iconAwesome="pencil-square-o" style="margin-left: 10px;" rendered="#{userBean.admin}" />
-							<b:commandButton actionListener="#{commonRoomsBean.preRemoveSelectedRoom(room)}" oncomplete="PF('removeSelectedCommonRoomDialog').show();"
+							<b:commandButton actionListener="#{commonRoomsBean.preRemoveSelectedRoom(room)}"
+							                 oncomplete="$('#panelHeaderCommon_#{room.name.replace(' ', '')}').click(); PF('removeSelectedCommonRoomDialog').show();"
 							                 ajax="true" update=":RemoveSelectedCommonRoomDlg :RemoveSelectedCommonRoomDialog" iconAwesome="trash-o" style="margin-left: 10px;" rendered="#{userBean.admin}" />
 						</f:facet>
 						<ul>

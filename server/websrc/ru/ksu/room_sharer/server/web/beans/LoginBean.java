@@ -5,6 +5,7 @@ import ru.ksu.room_sharer.server.Utils;
 import ru.ksu.room_sharer.server.users.User;
 import ru.ksu.room_sharer.server.web.beans.init.RoomSharerBean;
 import ru.ksu.room_sharer.server.web.misc.MessageUtils;
+import ru.ksu.room_sharer.server.web.misc.NavigationUtils;
 import ru.ksu.room_sharer.server.web.misc.users.UserSessionCollector;
 
 import javax.faces.context.FacesContext;
@@ -18,9 +19,7 @@ import java.util.Map;
 public class LoginBean extends RoomSharerBean
 {
 	public static final String AUTH_KEY = "user.data", ADMIN_KEY = "user.admin",
-			LOGIN_PAGE = "/ui/login.jsf", COMMON_ROOMS_PAGE = "/ui/restricted/common_rooms.jsf";
-	
-	public static final String USER_NAME = "userName", PASSWORD = "password";
+			USER_NAME = "userName", PASSWORD = "password";
 	
 	private String userName, password, requestUrl = null;
 	
@@ -99,7 +98,7 @@ public class LoginBean extends RoomSharerBean
 		
 		try
 		{
-			String context = getRequestContextPath();
+			String context = NavigationUtils.getRequestContextPath();
 			getLogger().trace("Context: " + context);
 			
 			// If user tried to access resources not authorized, use requestUrl from AuthenticationFilter to redirect him after logging in
@@ -109,7 +108,7 @@ public class LoginBean extends RoomSharerBean
 				requestUrl = null;
 			}
 			else
-				FacesContext.getCurrentInstance().getExternalContext().redirect(context + COMMON_ROOMS_PAGE);
+				FacesContext.getCurrentInstance().getExternalContext().redirect(context + NavigationUtils.COMMON_ROOMS_PAGE);
 		}
 		catch (IOException e)
 		{
@@ -124,9 +123,9 @@ public class LoginBean extends RoomSharerBean
 		
 		try
 		{
-			String context = getRequestContextPath();
+			String context = NavigationUtils.getRequestContextPath();
 			getLogger().trace("Context: {}", context);
-			FacesContext.getCurrentInstance().getExternalContext().redirect(context + LOGIN_PAGE);
+			FacesContext.getCurrentInstance().getExternalContext().redirect(context + NavigationUtils.LOGIN_PAGE);
 		}
 		catch (IOException e)
 		{
@@ -150,13 +149,7 @@ public class LoginBean extends RoomSharerBean
 		}
 		catch (IOException e)
 		{
-			getLogger().error("Couldn't redirect to after wrong log in", url, e);
+			getLogger().error("Couldn't redirect after wrong log in", url, e);
 		}
-	}
-	
-	private String getRequestContextPath()
-	{
-		String result = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-		return (result == null) ? "" : (!result.isEmpty() && !result.startsWith("/") ? "/" : "") + result;
 	}
 }

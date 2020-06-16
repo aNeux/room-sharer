@@ -41,6 +41,12 @@
 	</managed-bean>
 	
 	<managed-bean>
+		<managed-bean-name>watchBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.WatchBean</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
 		<managed-bean-name>usersManagementBean</managed-bean-name>
 		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.UsersManagementBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>

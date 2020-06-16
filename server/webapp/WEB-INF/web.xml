@@ -90,11 +90,6 @@
 		<location>/ui/session_expired.jsf</location>
 	</error-page>
 	
-	<context-param>
-		<param-name>session_expired_page</param-name>
-		<param-value>/ui/session_expired.jsf</param-value>
-	</context-param>
-	
 	<mime-mapping>
 		<extension>woff</extension>
 		<mime-type>application/font-woff</mime-type>

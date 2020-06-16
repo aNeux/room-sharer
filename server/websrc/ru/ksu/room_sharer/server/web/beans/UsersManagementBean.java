@@ -160,12 +160,12 @@ public class UsersManagementBean extends RoomSharerBean
 			usersManager.saveUser(editableUser);
 			refreshUsersList();
 			userDialogCanClose = true;
-			MessageUtils.addInfoMessage("Изменения были успешно сохранены");
+			MessageUtils.addInfoMessage(creatingNewUser ? "Новый пользователь был успешно создан" : "Изменения были успешно сохранены");
 		}
 		catch (NoSuchAlgorithmException | IOException e)
 		{
 			getLogger().error("Couldn't save new user or edit selected one", e);
-			MessageUtils.addErrorMessage("Ошибка", "Не удалось сохранить внесенные изменения");
+			MessageUtils.addErrorMessage("Ошибка", "Не удалось " + (creatingNewUser ? "создать нового пользователя" : "сохранить внесенные изменения"));
 		}
 	}
 	
@@ -175,7 +175,7 @@ public class UsersManagementBean extends RoomSharerBean
 		{
 			usersManager.removeUsers(selectedIndexes.stream().map(ind -> users.get(ind)).map(User::getUserName).collect(Collectors.toList()));
 			refreshUsersList();
-			MessageUtils.addInfoMessage("Аккаунты выбранных пользователей были успешно удалены");
+			MessageUtils.addInfoMessage("Учетные данные выбранных пользователей были успешно удалены");
 		}
 		catch (IOException e)
 		{
