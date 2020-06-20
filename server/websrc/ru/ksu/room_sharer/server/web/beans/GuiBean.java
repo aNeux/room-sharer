@@ -23,11 +23,6 @@ public class GuiBean extends RoomSharerBean
 		return getRequestContextPath() + USERS_MANAGEMENT_PAGE;
 	}
 	
-	public String getSettingsPagePath()
-	{
-		return getRequestContextPath() + SETTINGS_PAGE;
-	}
-	
 	public String getWatchPagePath()
 	{
 		return getRequestContextPath() + WATCH_PAGE;
@@ -47,11 +42,6 @@ public class GuiBean extends RoomSharerBean
 	public boolean isUsersManagementPage()
 	{
 		return getPageName().equals(USERS_MANAGEMENT_PAGE_SHORT);
-	}
-	
-	public boolean isSettingsPage()
-	{
-		return getPageName().equals(SETTINGS_PAGE_SHORT);
 	}
 	
 	public boolean isWatchPage()

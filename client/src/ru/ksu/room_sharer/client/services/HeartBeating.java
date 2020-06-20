@@ -30,10 +30,11 @@ public class HeartBeating extends Thread
 	@Override
 	public void run()
 	{
+		logger.info("Heartbeat thread started with beat interval = {} ms", config.getHeartbeatInterval());
 		// Build message to broadcast
 		String messageString = String.join(";", lanNetworkInfo.getHostName(),
-				lanNetworkInfo.getLanIpAddress(), String.valueOf(config.getMulticastPort()));
-		logger.info("Message to broadcast: {}", messageString);
+				lanNetworkInfo.getLanIpAddress(), String.valueOf(config.getStreamingPort()));
+		logger.info("Message to broadcast: '{}'", messageString);
 		byte[] message = messageString.getBytes();
 		
 		while (!stopped.get())
@@ -65,6 +66,7 @@ public class HeartBeating extends Thread
 	public void terminate()
 	{
 		stopped.set(true);
+		logger.info("Heartbeat thread is going to be terminated");
 	}
 	
 	public boolean isStopped()

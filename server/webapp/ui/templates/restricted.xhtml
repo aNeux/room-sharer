@@ -15,7 +15,6 @@
 				<b:navLink value="Мои классы" href="#{guiBean.getUserRoomsPagePath()}" active="#{guiBean.isUserRoomsPage()}" />
 				<c:if test="#{userBean.admin}">
 					<b:navLink value="Пользователи" href="#{guiBean.getUsersManagementPagePath()}" active="#{guiBean.isUsersManagementPage()}" />
-					<b:navLink value="Настройки" href="#{guiBean.getSettingsPagePath()}" active="#{guiBean.isSettingsPage()}" />
 				</c:if>
 				<c:if test="#{guiBean.isWatchPage()}">
 					<b:navLink value="Просмотр" active="true" />

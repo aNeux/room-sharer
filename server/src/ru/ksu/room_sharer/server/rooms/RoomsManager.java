@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ru.ksu.room_sharer.server.RoomSharer;
 import ru.ksu.room_sharer.server.Utils;
-import ru.ksu.room_sharer.server.clients.Client;
 import ru.ksu.room_sharer.server.clients.ClientsManager;
 
 import java.io.File;
@@ -71,8 +70,8 @@ public class RoomsManager
 		List<Room> result = new ArrayList<>();
 		for (Room room : from)
 		{
-			for (Client client : room.getClients()) // Need to check online status for each client
-				client.setOnline(clientsManager.isClientOnline(client));
+			// Need to check online status for each client
+			clientsManager.refreshClientsStatuses(room.getClients());
 			result.add(room);
 		}
 		return result;

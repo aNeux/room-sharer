@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ksu.room_sharer.server.clients.ClientsManager;
 import ru.ksu.room_sharer.server.rooms.RoomsManager;
+import ru.ksu.room_sharer.server.streaming.StreamingClientsManager;
 import ru.ksu.room_sharer.server.users.UsersManager;
 import ru.ksu.room_sharer.server.web.misc.DeploymentConfig;
 
@@ -23,12 +24,18 @@ public class RoomSharer
 	private UsersManager usersManager;
 	private ClientsManager clientsManager;
 	private RoomsManager roomsManager;
+	private StreamingClientsManager streamingClientsManager;
 	
 	public RoomSharer() throws RoomSharerException
 	{
 		if (RoomSharer.instance != null)
 			throw new RoomSharerException("Room-Sharer instance is already created");
 		RoomSharer.instance = this;
+	}
+	
+	public static RoomSharer getInstance()
+	{
+		return instance;
 	}
 	
 	/* Application initialization */
@@ -54,6 +61,8 @@ public class RoomSharer
 			Files.createDirectories(Paths.get(getRootRelative(appConfig.getUsersRoomsDir())));
 			roomsManager = new RoomsManager(new File(getRootRelative(appConfig.getCommonRoomsFile())),
 					new File(getRootRelative(appConfig.getUsersRoomsDir())));
+			
+			streamingClientsManager = new StreamingClientsManager();
 		}
 		catch (Exception e)
 		{
@@ -67,6 +76,7 @@ public class RoomSharer
 	public void beforeShutdown()
 	{
 		clientsManager.stopListening();
+		streamingClientsManager.disconnectAll();
 	}
 	
 	
@@ -115,9 +125,8 @@ public class RoomSharer
 		return roomsManager;
 	}
 	
-	
-	public static RoomSharer getInstance()
+	public StreamingClientsManager getStreamingClientsManager()
 	{
-		return instance;
+		return streamingClientsManager;
 	}
 }

@@ -47,14 +47,14 @@
 	</managed-bean>
 	
 	<managed-bean>
-		<managed-bean-name>usersManagementBean</managed-bean-name>
-		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.UsersManagementBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-name>screenshotsProvider</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.ScreenshotsProvider</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
-		<managed-bean-name>settingsBean</managed-bean-name>
-		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.SettingsBean</managed-bean-class>
+		<managed-bean-name>usersManagementBean</managed-bean-name>
+		<managed-bean-class>ru.ksu.room_sharer.server.web.beans.UsersManagementBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	

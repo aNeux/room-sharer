@@ -24,10 +24,10 @@ public class Room implements Serializable, Cloneable
 		this.clients = clients;
 	}
 	
-	public Room(Room room)
+	public Room(Room roomToClone)
 	{
-		this.name = room.getName();
-		this.clients = room.getClients();
+		name = roomToClone.getName();
+		clients = new ArrayList<>(roomToClone.getClients());
 	}
 	
 	

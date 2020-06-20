@@ -11,19 +11,19 @@ public class Client implements Serializable
 	private static final long serialVersionUID = 3134915980113599282L;
 	
 	private String hostName, pseudoName, address;
-	private int port;
+	private int streamingPort;
 	
 	@JsonIgnore
 	private boolean online = false;
 	
 	public Client() { }
 	
-	public Client(String hostName, String pseudoName, String address, int port)
+	public Client(String hostName, String pseudoName, String address, int streamingPort)
 	{
 		this.hostName = hostName;
 		this.pseudoName = pseudoName;
 		this.address = address;
-		this.port = port;
+		this.streamingPort = streamingPort;
 	}
 	
 	public Client(String clientDesc) throws IllegalArgumentException
@@ -34,7 +34,7 @@ public class Client implements Serializable
 		
 		hostName = splitted[0];
 		address = splitted[1];
-		port = Integer.parseInt(splitted[2]);
+		streamingPort = Integer.parseInt(splitted[2]);
 	}
 	
 	public Client(DatagramPacket packet) throws IllegalArgumentException
@@ -73,14 +73,14 @@ public class Client implements Serializable
 		return address;
 	}
 	
-	public void setPort(int port)
+	public void setStreamingPort(int streamingPort)
 	{
-		this.port = port;
+		this.streamingPort = streamingPort;
 	}
 	
-	public int getPort()
+	public int getStreamingPort()
 	{
-		return port;
+		return streamingPort;
 	}
 	
 	public void setOnline(boolean online)
@@ -102,12 +102,18 @@ public class Client implements Serializable
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Client client = (Client)o;
-		return port == client.port && hostName.equals(client.hostName) && address.equals(client.address);
+		return streamingPort == client.streamingPort && hostName.equals(client.hostName) && address.equals(client.address);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(hostName, address, port);
+		return Objects.hash(hostName, address, streamingPort);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.join(";", hostName, address, String.valueOf(streamingPort));
 	}
 }

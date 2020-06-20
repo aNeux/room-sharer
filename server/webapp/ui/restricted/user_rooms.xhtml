@@ -12,13 +12,13 @@
 	
 	<ui:define name="content">
 		<h:form id="UserRooms">
-			<b:well styleClass="wellRoomStats">
+			<b:well styleClass="wellCustom">
 				<div>
 					Всего классов: <strong><h:outputText value="#{userRoomsBean.rooms.size()}" /></strong><br/>
 					Онлайн: <strong><h:outputText value="#{userRoomsBean.onlineClientsCount}" /></strong>
 					/ <strong><h:outputText value="#{userRoomsBean.totalClientsCount}" /></strong>
 				</div>
-				<div id="wellRightButtonsContainer">
+				<div id="wellRightContainer">
 					<b:commandButton value="Новый класс" actionListener="#{userRoomsBean.preNewRoom}" oncomplete="PF('editUserRoomDialog').show();"
 					                 ajax="true" update=":EditUserRoomDlg :EditUserRoomDialog" style="margin-right: 10px;" iconAwesome="plus" />
 					<b:commandButton value="Обновить" actionListener="#{userRoomsBean.forceLoadingRoomsFromFile}" ajax="true" update="UserRooms" iconAwesome="refresh" />
@@ -43,10 +43,8 @@
 						<ul>
 							<c:forEach var="client" items="#{room.clients}">
 								<li>
-									<h:outputText value="#{client.pseudoName}" rendered="#{!client.pseudoName.isEmpty()}" />
-									<h:outputText value="#{!client.pseudoName.isEmpty() ? (' (' += client.hostName += ')') : client.hostName} " />
-									<h:outputText value="&lt;#{client.address}&gt;" />
-									<b:badge style="margin-left: 10px; background-color: #5cb85c;" value="online" rendered="#{client.online}" />
+									<h:outputText value="#{userRoomsBean.getClientFullName(client)} &lt;#{client.address}&gt;" />
+									<b:badge value="online" style="margin-left: 10px; background-color: #5cb85c;" rendered="#{client.online}" />
 								</li>
 							</c:forEach>
 						</ul>
@@ -66,8 +64,7 @@
 				             selectedRow="#{userRoomsBean.selectedClientsIndexesString}"
 				             ondeselect="ajax:userRoomsBean.onDeselectClients(indexes);"
 				             caption="Выберите компьютеры, которые необходимо включить в класс:">
-					<b:dataTableColumn selection-mode="multiple" style="text-align: center;" width="5%" />
-					<b:dataTableColumn label="Имя" headerStyle="text-align: center;" width="35%">
+					<b:dataTableColumn label="Имя" headerStyle="text-align: center;" width="40%">
 						<p:inputText value="#{client.pseudoName}" />
 					</b:dataTableColumn>
 					<b:dataTableColumn label="Хост" headerStyle="text-align: center;" value="#{client.hostName}" width="30%" />

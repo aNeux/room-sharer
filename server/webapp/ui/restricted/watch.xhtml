@@ -3,18 +3,51 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://bootsfaces.net/ui"
                 template="../templates/restricted.xhtml">
 	
 	<ui:define name="title">Просмотр</ui:define>
 	
-	<f:metadata>
-		<f:event type="preRenderView" listener="#{watchBean.obtainWatchingRoomObj}"/>
-	</f:metadata>
-	
 	<ui:define name="content">
-		<h:form>
-			<h:outputText value="#{watchBean.watchingRoom.name}" />
+		<h:form id="RefreshPollForm">
+			<!-- This is needed to refresh clients statuses and update GUI due with new data -->
+			<b:poll interval="5000" actionListener="#{watchBean.refreshClients}" update=":WatchingForm" />
+		</h:form>
+		
+		<h:form id="WatchingForm">
+			<b:well styleClass="wellCustom">
+				<div>
+					<h4>Вы наблюдаете за классом <strong><h:outputText value="#{watchBean.watchingRoom.name}" /></strong></h4>
+					Всего компьютеров в классе: <strong><h:outputText value="#{watchBean.watchingRoom.clients.size()}" /></strong><br/>
+					Сейчас в сети: <strong><h:outputText value="#{watchBean.onlineClientsCount}" /></strong><br/>
+					Под наблюдением: <strong><h:outputText value="#{watchBean.countOfCurrentlyWatching}" /></strong>
+				</div>
+			</b:well>
+			
+			<b:panelGrid columns="3">
+				<c:forEach var="client" items="#{watchBean.watchingRoom.clients}">
+					<b:thumbnail style="padding: 10px;">
+						<div style="text-align: center;">
+							<h:outputText value="#{watchBean.getClientFullName(client)}" style="font-size: 13pt;" />
+							<b:badge value="online" style="margin-left: 10px; background-color: #5cb85c;" rendered="#{client.online}" />
+						</div>
+						<p:graphicImage value="#{screenshotsProvider.currentScreenshot}" style="padding: 5px; height: 350px;" cache="false">
+							<f:param name="clientDesc" value="#{client.toString()}" />
+						</p:graphicImage>
+						
+						<div style="margin-top: 5px; text-align: center;">
+							<b:commandButton value="Запустить" actionListener="#{watchBean.startWatching(client)}"
+							                 ajax="true" update=":Growl :WatchingForm" iconAwesome="play"
+							                 disabled="#{!client.online || watchBean.isWatchingForClient(client)}" />
+							<b:commandButton value="Остановить" actionListener="#{watchBean.stopWatching(client)}"
+							                 ajax="true" update=":Growl :WatchingForm" iconAwesome="stop" style="margin-left: 10px;"
+							                 disabled="#{!client.online || !watchBean.isWatchingForClient(client)}" />
+						</div>
+					</b:thumbnail>
+				</c:forEach>
+			</b:panelGrid>
 		</h:form>
 	</ui:define>
 

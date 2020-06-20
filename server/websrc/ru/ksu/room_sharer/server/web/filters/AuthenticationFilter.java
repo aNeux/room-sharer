@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static ru.ksu.room_sharer.server.web.misc.NavigationUtils.*;
 
@@ -31,8 +30,8 @@ public class AuthenticationFilter implements Filter
 		{
 			String requestedPage = servletRequest.getRequestURI();
 			requestedPage = requestedPage.substring(requestedPage.lastIndexOf('/') + 1, requestedPage.lastIndexOf('.'));
-			if (!(boolean)session.getAttribute(LoginBean.ADMIN_KEY) && Arrays.asList(USERS_MANAGEMENT_PAGE_SHORT, SETTINGS_PAGE_SHORT).contains(requestedPage))
-				servletResponse.sendRedirect(context + COMMON_ROOMS_PAGE); // Only admins could access users management and settings pages
+			if (!(boolean)session.getAttribute(LoginBean.ADMIN_KEY) && USERS_MANAGEMENT_PAGE_SHORT.equals(requestedPage))
+				servletResponse.sendRedirect(context + COMMON_ROOMS_PAGE); // Only administrators could access users management page
 			else
 				chain.doFilter(request, servletResponse); // No restrictions found to process request
 		}

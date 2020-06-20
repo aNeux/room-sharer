@@ -1,7 +1,9 @@
 package ru.ksu.room_sharer.server;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ksu.room_sharer.server.clients.Client;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -41,5 +43,13 @@ public class Utils
 		{
 			logger.error("Couldn't close resource", e);
 		}
+	}
+	
+	public static String getClientFullName(Client client)
+	{
+		String result = client.getHostName(), pseudoName = client.getPseudoName();
+		if (StringUtils.isNotBlank(pseudoName))
+			result = pseudoName + " (" + result + ")";
+		return result;
 	}
 }

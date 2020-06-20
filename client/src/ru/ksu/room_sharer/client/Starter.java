@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 import ru.ksu.room_sharer.client.misc.Configuration;
 import ru.ksu.room_sharer.client.misc.LanNetworkInfo;
 import ru.ksu.room_sharer.client.services.HeartBeating;
+import ru.ksu.room_sharer.client.services.streaming.StreamingServer;
 
 import java.io.File;
 
 public class Starter
 {
 	private final static Logger logger = LoggerFactory.getLogger(Starter.class);
-	private final static int HEARTBEAT_INTERVAL_DEFAULT = 3000;
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -26,7 +26,9 @@ public class Starter
 		LanNetworkInfo lanNetworkInfo = new LanNetworkInfo();
 		
 		// Start heart beating
-		logger.info("Starting heartbeat thread with interval = {} ms", config.getHeartbeatInterval());
 		new HeartBeating(lanNetworkInfo, config).start();
+		
+		// Start streaming server
+		new StreamingServer(config).start();
 	}
 }

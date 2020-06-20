@@ -52,7 +52,13 @@ public class ClientsManager
 	
 	public boolean isClientOnline(Client client)
 	{
-		return clients.contains(client); // All found clients should be online in current movement
+		return clients.contains(client); // All found clients should be online at the current moment
+	}
+	
+	public void refreshClientsStatuses(List<Client> clients)
+	{
+		for (Client client : clients)
+			client.setOnline(isClientOnline(client));
 	}
 	
 	public List<Client> getClients()

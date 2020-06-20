@@ -2,6 +2,7 @@ package ru.ksu.room_sharer.server.web.beans.rooms;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.ksu.room_sharer.server.RoomSharer;
+import ru.ksu.room_sharer.server.Utils;
 import ru.ksu.room_sharer.server.clients.Client;
 import ru.ksu.room_sharer.server.clients.ClientsManager;
 import ru.ksu.room_sharer.server.rooms.Room;
@@ -13,10 +14,7 @@ import ru.ksu.room_sharer.server.web.misc.NavigationUtils;
 
 import javax.faces.context.FacesContext;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class RoomsBean extends RoomSharerBean
@@ -34,11 +32,16 @@ public abstract class RoomsBean extends RoomSharerBean
 	
 	public RoomsBean()
 	{
-		clientsManager = RoomSharer.getInstance().getClientsManager();
-		roomsManager = RoomSharer.getInstance().getRoomsManager();
+		RoomSharer app = RoomSharer.getInstance();
+		clientsManager = app.getClientsManager();
+		roomsManager = app.getRoomsManager();
 		refreshRoomsList();
 		preNewRoom();
 	}
+	
+	/** Return {@code null} if using common rooms or user name if need to load rooms available for current user. */
+	protected abstract String roomsAvailableFor();
+	
 	
 	/* Rooms list loading and statistics */
 	
@@ -91,6 +94,11 @@ public abstract class RoomsBean extends RoomSharerBean
 		return (int)room.getClients().stream().filter(Client::isOnline).count();
 	}
 	
+	public String getClientFullName(Client client)
+	{
+		return Utils.getClientFullName(client);
+	}
+	
 	
 	/* Redirect to watch page with selected room saved to session map */
 	
@@ -115,16 +123,17 @@ public abstract class RoomsBean extends RoomSharerBean
 	
 	public void preEditRoom(Room editableRoom)
 	{
-		this.editableRoom = editableRoom;
-		// Add not existing online clients to the end of already added list
-		this.editableRoom.getClients().addAll(clientsManager.getClients().stream()
-				.filter(c -> !this.editableRoom.getClients().contains(c)).collect(Collectors.toList()));
+		this.editableRoom = new Room(editableRoom);
 		editableRoomName = this.editableRoom.getName();
 		
 		// Auto select already added clients on top
 		clientsSelectedIndexes.clear();
 		for (int i = 0; i < this.editableRoom.getClients().size(); i++)
 			clientsSelectedIndexes.add(i);
+		
+		// Add not existing online clients to the end of already added list
+		this.editableRoom.getClients().addAll(clientsManager.getClients().stream()
+				.filter(c -> !this.editableRoom.getClients().contains(c)).collect(Collectors.toList()));
 		
 		creatingNewRoom = false;
 		editRoomDialogCanClose = false;
@@ -191,6 +200,12 @@ public abstract class RoomsBean extends RoomSharerBean
 		
 		try
 		{
+			// Obtain only selected clients and apply them to the editable room
+			List<Client> allRoomClients = editableRoom.getClients(), selectedClients = new ArrayList<>();
+			for (Integer index : clientsSelectedIndexes)
+				selectedClients.add(allRoomClients.get(index));
+			editableRoom.setClients(selectedClients);
+			
 			roomsManager.saveRoom(roomsAvailableFor(), editableRoom, editableRoomName);
 			refreshRoomsList();
 			editRoomDialogCanClose = true;
@@ -226,8 +241,4 @@ public abstract class RoomsBean extends RoomSharerBean
 			MessageUtils.addErrorMessage("Ошибка", "Не удалось удалить класс '" + roomName + "'");
 		}
 	}
-	
-	
-	/** Return {@code null} if using common rooms or user name if need to load rooms available for current user. */
-	protected abstract String roomsAvailableFor();
 }
