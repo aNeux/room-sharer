@@ -15,57 +15,66 @@ public class Configuration
 			STREAMING_PORT = "STREAMING_PORT",
 			COMPRESSION_QUALITY = "COMPRESSION_QUALITY";
 	
-	private final Properties props;
+	private String multicastGroupIpAddress;
+	private int multicastPort, heartbeatInterval, streamingPort;
+	private float compressionQuality;
 	
 	public Configuration(File configurationFile) throws IOException
 	{
-		props = new Properties();
+		Properties props = new Properties();
 		try (FileInputStream fis = new FileInputStream(configurationFile))
 		{
 			props.load(fis);
+			multicastGroupIpAddress = props.getProperty(MULTICAST_GROUP_IP_ADDRESS, "226.186.248.17");
+			multicastPort = getIntProperty(props, MULTICAST_PORT, 7562);
+			heartbeatInterval = getIntProperty(props, HEARTBEAT_INTERVAL, 3000);
+			streamingPort = getIntProperty(props, STREAMING_PORT, 5482);
+			compressionQuality = getFloatProperty(props, COMPRESSION_QUALITY, 0.7f);
 		}
 	}
 	
 	public String getMulticastGroupIpAddress()
 	{
-		return props.getProperty(MULTICAST_GROUP_IP_ADDRESS,"226.186.248.17");
+		return multicastGroupIpAddress;
 	}
 	
 	public int getMulticastPort()
 	{
-		return getIntProperty(MULTICAST_PORT, 7562);
+		return multicastPort;
 	}
 	
 	public int getHeartbeatInterval()
 	{
-		return getIntProperty(HEARTBEAT_INTERVAL, 3000);
+		return heartbeatInterval;
 	}
 	
 	public int getStreamingPort()
 	{
-		return getIntProperty(STREAMING_PORT, 5482);
+		return streamingPort;
 	}
 	
 	public float getCompressionQuality()
 	{
-		float defaultValue = 0.5f;
-		try
-		{
-			float readValue = Float.parseFloat(props.getProperty(COMPRESSION_QUALITY));
-			if (readValue >= 0 && readValue <= 1)
-				return readValue;
-		}
-		catch (Exception e)
-		{
-			// Will use default compression quality
-		}
-		return defaultValue;
+		return compressionQuality;
 	}
 	
 	
-	private int getIntProperty(String name, int defaultValue)
+	private int getIntProperty(Properties props, String name, int defaultValue)
 	{
 		String res = props.getProperty(name);
 		return StringUtils.isNotBlank(res) ? Integer.parseInt(res) : defaultValue;
+	}
+	
+	private float getFloatProperty(Properties props, String name, float defaultValue)
+	{
+		try
+		{
+			float readValue = Float.parseFloat(props.getProperty(name));
+			return readValue >= 0 && readValue <= 1 ? readValue : defaultValue;
+		}
+		catch (NumberFormatException e)
+		{
+			return defaultValue;
+		}
 	}
 }

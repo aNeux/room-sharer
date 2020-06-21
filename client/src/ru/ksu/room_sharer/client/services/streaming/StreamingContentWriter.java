@@ -25,10 +25,19 @@ public class StreamingContentWriter implements Runnable
 	private final ChannelHandlerContext chContext;
 	private final float compressionQuality;
 	
-	public StreamingContentWriter(ChannelHandlerContext chContext, float compressionQuality)
+	// Variables that will be used a lot of times being the same
+	private final BufferedImage cursorImage;
+	private final Robot robot;
+	private final Rectangle rectangle;
+	
+	public StreamingContentWriter(ChannelHandlerContext chContext, float compressionQuality) throws IOException, AWTException
 	{
 		this.chContext = chContext;
 		this.compressionQuality = compressionQuality;
+		
+		cursorImage = ImageIO.read(new File("images/cursor.png"));
+		robot = new Robot();
+		rectangle = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 	}
 	
 	@Override
@@ -38,24 +47,26 @@ public class StreamingContentWriter implements Runnable
 		{
 			chContext.writeAndFlush(makeScreenshot());
 		}
-		catch (AWTException | IOException e)
+		catch (IOException e)
 		{
-			logger.error("Error occurred while making screenshot", e);
+			logger.error("Error occurred while making next screenshot", e);
 		}
 	}
 	
-	private ByteBuf makeScreenshot() throws AWTException, IOException
+	private ByteBuf makeScreenshot() throws IOException
 	{
-		BufferedImage screenshot = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-		Point mouse = MouseInfo.getPointerInfo().getLocation();
-		Graphics2D graphics2D = screenshot.createGraphics();
-		graphics2D.drawImage(ImageIO.read(new File("images/cursor.png")), mouse.x, mouse.y, 10, 16, null);
-		
-		// Compress and write prepared image to bytes array
+		Graphics2D graphics2D = null;
 		ImageWriter jpgWriter = null;
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			 ImageOutputStream ios = new MemoryCacheImageOutputStream(baos))
 		{
+			// Make screenshot and place mouse pointer to the necessary place
+			BufferedImage screenshot = robot.createScreenCapture(rectangle);
+			Point mouse = MouseInfo.getPointerInfo().getLocation();
+			graphics2D = screenshot.createGraphics();
+			graphics2D.drawImage(cursorImage, mouse.x, mouse.y, 10, 16, null);
+			
+			// Compress and write prepared image to bytes array
 			jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
 			ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
 			jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
@@ -66,8 +77,11 @@ public class StreamingContentWriter implements Runnable
 		}
 		finally
 		{
+			// Dispose used objects to allow garbage collector do its work
 			if (jpgWriter != null)
 				jpgWriter.dispose();
+			if (graphics2D != null)
+				graphics2D.dispose();
 		}
 	}
 }

@@ -44,6 +44,7 @@ task releaseBuild(type: Zip, group: 'Room-Sharer', dependsOn: jar) {
         include 'images/'
         include 'room-sharer.cfg'
         include 'log.properties'
+        include 'start.*'
     }
 
     archiveBaseName = 'roomsharer-client'
