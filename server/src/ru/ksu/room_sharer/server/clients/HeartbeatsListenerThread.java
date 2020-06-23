@@ -2,7 +2,7 @@ package ru.ksu.room_sharer.server.clients;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.ksu.room_sharer.server.Utils;
+import ru.ksu.room_sharer.server.misc.Utils;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -40,7 +40,7 @@ public class HeartbeatsListenerThread extends Thread
 				if (!clients.isEmpty())
 					clients.remove(0);
 			}
-		}, 0, 30000);
+		}, 0, 60000);
 	}
 	
 	@Override

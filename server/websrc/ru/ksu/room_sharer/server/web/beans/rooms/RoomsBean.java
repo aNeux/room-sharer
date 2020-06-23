@@ -2,9 +2,9 @@ package ru.ksu.room_sharer.server.web.beans.rooms;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.ksu.room_sharer.server.RoomSharer;
-import ru.ksu.room_sharer.server.Utils;
 import ru.ksu.room_sharer.server.clients.Client;
 import ru.ksu.room_sharer.server.clients.ClientsManager;
+import ru.ksu.room_sharer.server.misc.Utils;
 import ru.ksu.room_sharer.server.rooms.Room;
 import ru.ksu.room_sharer.server.rooms.RoomsManager;
 import ru.ksu.room_sharer.server.web.beans.WatchBean;

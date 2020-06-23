@@ -51,7 +51,7 @@ public class FacesExceptionHandler extends ExceptionHandlerWrapper
 					try
 					{
 						requestMap.put("currentViewId", vee.getViewId());
-						navigationHandler.handleNavigation(facesContext, null, "/ui/session_expired.jsf");
+						navigationHandler.handleNavigation(facesContext, null, NavigationUtils.SESSION_EXPIRED_PAGE);
 						facesContext.renderResponse();
 					}
 					finally
@@ -67,4 +67,3 @@ public class FacesExceptionHandler extends ExceptionHandlerWrapper
 		getWrapped().handle();
 	}
 }
-

@@ -1,7 +1,7 @@
 package ru.ksu.room_sharer.server.web.beans;
 
 import ru.ksu.room_sharer.server.RoomSharer;
-import ru.ksu.room_sharer.server.Utils;
+import ru.ksu.room_sharer.server.misc.Utils;
 import ru.ksu.room_sharer.server.users.User;
 import ru.ksu.room_sharer.server.web.beans.init.RoomSharerBean;
 import ru.ksu.room_sharer.server.web.misc.MessageUtils;

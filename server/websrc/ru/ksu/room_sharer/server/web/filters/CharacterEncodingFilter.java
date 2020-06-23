@@ -1,6 +1,6 @@
 package ru.ksu.room_sharer.server.web.filters;
 
-import ru.ksu.room_sharer.server.Utils;
+import ru.ksu.room_sharer.server.misc.Utils;
 
 import javax.servlet.*;
 import java.io.IOException;

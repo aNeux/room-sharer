@@ -1,9 +1,9 @@
 package ru.ksu.room_sharer.server.web.beans;
 
 import ru.ksu.room_sharer.server.RoomSharer;
-import ru.ksu.room_sharer.server.Utils;
 import ru.ksu.room_sharer.server.clients.Client;
 import ru.ksu.room_sharer.server.clients.ClientsManager;
+import ru.ksu.room_sharer.server.misc.Utils;
 import ru.ksu.room_sharer.server.rooms.Room;
 import ru.ksu.room_sharer.server.streaming.StreamingClientsManager;
 import ru.ksu.room_sharer.server.web.beans.init.RoomSharerBean;
@@ -20,13 +20,14 @@ import java.util.Set;
 public class WatchBean extends RoomSharerBean
 {
 	public static final String WATCHING_ROOM_KEY = "watching.room.obj.key";
+	private static int DEFAULT_POLL_INTERVAL = 5;
 	
 	private Room watchingRoom = null;
 	private final ClientsManager clientsManager;
 	private final StreamingClientsManager streamingClientsManager;
 	
 	private final Set<Client> listeningClients = new HashSet<>();
-	private int refreshInterval = 5000;
+	private int pollRefreshInterval = DEFAULT_POLL_INTERVAL;
 	
 	public WatchBean()
 	{
@@ -75,14 +76,20 @@ public class WatchBean extends RoomSharerBean
 		return listeningClients.size();
 	}
 	
-	public int getRefreshInterval()
+	public int getPollRefreshInterval()
 	{
-		return refreshInterval;
+		return pollRefreshInterval;
 	}
 	
 	public String getClientFullName(Client client)
 	{
 		return Utils.getClientFullName(client);
+	}
+	
+	public String getClientId(Client client)
+	{
+		// Return IP-address modified some way to apply HTML element identifier
+		return client.getAddress().replaceAll("\\.", "");
 	}
 	
 	
@@ -93,12 +100,12 @@ public class WatchBean extends RoomSharerBean
 		{
 			streamingClientsManager.connect(client);
 			listeningClients.add(client);
-			refreshInterval = 200;
+			pollRefreshInterval = 1;
 			MessageUtils.addInfoMessage("Соединение с '" + clientName + "' установлено");
 		}
 		catch (InterruptedException e)
 		{
-			MessageUtils.addErrorMessage("Не удалось подключиться к " + clientName);
+			MessageUtils.addErrorMessage("Не удалось подключиться к '" + clientName + "'");
 		}
 	}
 	
@@ -112,7 +119,7 @@ public class WatchBean extends RoomSharerBean
 		streamingClientsManager.disconnect(client);
 		listeningClients.remove(client);
 		if (listeningClients.size() == 0)
-			refreshInterval = 5000; // Reset refresh interval to default value
+			pollRefreshInterval = DEFAULT_POLL_INTERVAL; // Reset refresh interval to default value
 		MessageUtils.addInfoMessage("Соединение с '" + getClientFullName(client) + "' было успешно закрыто");
 	}
 }

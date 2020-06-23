@@ -92,7 +92,7 @@ img {
 	background: none;
 	overflow: auto;
 	margin-top: -20px;
-	padding: 15px;
+	padding: 15px 15px 57px 15px;
 }
 
 #pageFooter {
@@ -107,7 +107,7 @@ img {
 	-moz-box-shadow: 0px -2px 2px 1px rgba(60, 64, 77, 0.05);
 	box-shadow: 0px -2px 2px 1px rgba(60, 64, 77, 0.05);
 	text-align: right;
-	font-size: 0.813em;
+	font-size: 0.87em;
 	color: #777777;
 }
 
@@ -133,4 +133,13 @@ img {
 	-webkit-border-radius: 3px;
 	display: flex;
 	align-items: center;
+}
+
+#scrollUp {
+  background-image: url('../images/scroll-up.png');
+  bottom: 65px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  outline: none;
 }

@@ -1,7 +1,5 @@
 package ru.ksu.room_sharer.server;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -13,8 +11,12 @@ public class AppConfig
 			USERS_ROOMS_DIR = CFG_DIR + "users_rooms/", COMMON_ROOMS_FILE = CFG_DIR + "common-rooms.json",
 			USERS_FILE = CFG_DIR + "users.json";
 	
+	private static final String MULTICAST_GROUP_IP_ADDRESS = "MULTICAST_GROUP_IP_ADDRESS",
+			MULTICAST_PORT = "MULTICAST_PORT";
+	
 	private final String configFileName;
-	private Properties props;
+	private String multicastGroupIdAddress;
+	private int multicastPort;
 	
 	public AppConfig(String configFileName)
 	{
@@ -23,22 +25,23 @@ public class AppConfig
 	
 	public void init() throws IOException
 	{
-		props = new Properties();
 		try (FileInputStream fis = new FileInputStream(RoomSharer.getInstance().getRootRelative(getConfigFilePath())))
 		{
+			Properties props = new Properties();
 			props.load(fis);
+			multicastGroupIdAddress = props.getProperty(MULTICAST_GROUP_IP_ADDRESS,"226.186.248.17");
+			multicastPort = getIntProperty(props, MULTICAST_PORT, 7562);
 		}
 	}
 	
 	public String getMulticastGroupIpAddress()
 	{
-		return props.getProperty("MULTICAST_GROUP_IP_ADDRESS","226.186.248.17");
+		return multicastGroupIdAddress;
 	}
 	
 	public int getMulticastPort()
 	{
-		String res = props.getProperty("MULTICAST_PORT");
-		return StringUtils.isNotBlank(res) ? Integer.parseInt(res) : 7562;
+		return multicastPort;
 	}
 	
 	
@@ -70,5 +73,18 @@ public class AppConfig
 	public String getUsersFile()
 	{
 		return USERS_FILE;
+	}
+	
+	
+	private int getIntProperty(Properties props, String name, int defaultValue)
+	{
+		try
+		{
+			return Integer.parseInt(props.getProperty(name));
+		}
+		catch (NumberFormatException e)
+		{
+			return defaultValue;
+		}
 	}
 }

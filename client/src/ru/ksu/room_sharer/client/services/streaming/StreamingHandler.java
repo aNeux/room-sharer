@@ -14,11 +14,14 @@ public class StreamingHandler extends ChannelInboundHandlerAdapter
 	private final static Logger logger = LoggerFactory.getLogger(StreamingHandler.class);
 	
 	private final float compressionQuality;
+	private final int imageSendingInterval;
+	
 	private ScheduledFuture scheduledFuture;
 	
-	public StreamingHandler(float compressionQuality)
+	public StreamingHandler(float compressionQuality, int imageSendingInterval)
 	{
 		this.compressionQuality = compressionQuality;
+		this.imageSendingInterval = imageSendingInterval;
 	}
 	
 	@Override
@@ -26,7 +29,7 @@ public class StreamingHandler extends ChannelInboundHandlerAdapter
 	{
 		logger.debug("Client <{}> connected. Start streaming..", getRemoteHostCredentials(ctx));
 		scheduledFuture = ctx.channel().eventLoop().scheduleAtFixedRate(new StreamingContentWriter(ctx,
-				compressionQuality), 0, 200, TimeUnit.MILLISECONDS);
+				compressionQuality), 0, imageSendingInterval, TimeUnit.MILLISECONDS);
 	}
 	
 	@Override

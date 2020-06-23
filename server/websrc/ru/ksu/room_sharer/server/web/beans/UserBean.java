@@ -2,7 +2,7 @@ package ru.ksu.room_sharer.server.web.beans;
 
 import org.apache.commons.lang3.StringUtils;
 import ru.ksu.room_sharer.server.RoomSharer;
-import ru.ksu.room_sharer.server.Utils;
+import ru.ksu.room_sharer.server.misc.Utils;
 import ru.ksu.room_sharer.server.users.User;
 import ru.ksu.room_sharer.server.users.UserException;
 import ru.ksu.room_sharer.server.users.UsersManager;

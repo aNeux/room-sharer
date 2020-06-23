@@ -36,7 +36,8 @@ public class StreamingServer
 					@Override
 					protected void initChannel(SocketChannel ch) throws Exception
 					{
-						ch.pipeline().addLast(new StreamingHandler(config.getCompressionQuality()));
+						ch.pipeline().addLast(new StreamingHandler(config.getCompressionQuality(),
+								config.getImageSendingInterval()));
 					}
 				})
 				.option(ChannelOption.SO_BACKLOG, 128)
@@ -45,6 +46,7 @@ public class StreamingServer
 		bootstrap.bind(config.getStreamingPort()).sync();
 		logger.info("Streaming server has been started on port {}", config.getStreamingPort());
 		logger.info("Screenshots compression quality is set to {}", config.getCompressionQuality());
+		logger.info("Image sending interval = {} ms", config.getImageSendingInterval());
 	}
 	
 	public void stop()

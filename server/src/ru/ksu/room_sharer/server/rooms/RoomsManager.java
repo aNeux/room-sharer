@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ru.ksu.room_sharer.server.RoomSharer;
-import ru.ksu.room_sharer.server.Utils;
 import ru.ksu.room_sharer.server.clients.ClientsManager;
+import ru.ksu.room_sharer.server.misc.Utils;
 
 import java.io.File;
 import java.io.IOException;

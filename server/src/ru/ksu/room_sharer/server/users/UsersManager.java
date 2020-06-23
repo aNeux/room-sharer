@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.ksu.room_sharer.server.Utils;
+import ru.ksu.room_sharer.server.misc.Utils;
 
 import java.io.File;
 import java.io.IOException;

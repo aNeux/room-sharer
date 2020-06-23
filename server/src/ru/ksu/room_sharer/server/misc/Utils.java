@@ -1,4 +1,4 @@
-package ru.ksu.room_sharer.server;
+package ru.ksu.room_sharer.server.misc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

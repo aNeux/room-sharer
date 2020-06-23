@@ -27,7 +27,7 @@
 			
 			<b:panelGrid columns="3">
 				<c:forEach var="room" items="#{userRoomsBean.rooms}">
-					<b:panel collapsed="#{userRoomsBean.rooms.size() > 8}">
+					<b:panel collapsed="#{userRoomsBean.rooms.size() > 6}">
 						<f:facet name="heading">
 							<i class="fa fa-list-alt" style="padding-right: 10px;" id="panelHeaderUser_#{room.name.replace(' ', '')}" />
 							<h:outputText value="#{room.name} (#{userRoomsBean.getOnlineClientsCount(room)} / #{room.clients.size()})" />
